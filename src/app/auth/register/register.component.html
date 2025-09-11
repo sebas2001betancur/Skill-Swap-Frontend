@@ -1,0 +1,152 @@
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8">
+    <!-- Header del formulario -->
+    <div class="text-center">
+      <div class="mx-auto h-16 w-16 rounded-full bg-indigo-100 flex items-center justify-center mb-4">
+        <svg class="h-8 w-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+        </svg>
+      </div>
+      <h2 class="text-3xl font-extrabold text-gray-900">
+        Crear una Cuenta
+      </h2>
+      <p class="mt-2 text-sm text-gray-600">
+        Únete a nuestra comunidad de SkillSwap
+      </p>
+    </div>
+
+    <!-- Formulario -->
+    <div class="bg-white py-8 px-4 shadow-xl sm:rounded-lg sm:px-10 border border-gray-200">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate class="space-y-6">
+        
+        <!-- Campo Nombre -->
+        <div>
+          <label for="nombre" class="block text-sm font-medium text-gray-700 mb-1">
+            Nombre Completo
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+            </div>
+            <input
+              id="nombre"
+              type="text"
+              formControlName="nombre"
+              class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+              placeholder="Tu nombre completo"
+              [class.border-red-300]="f['nombre'].invalid && (f['nombre'].dirty || f['nombre'].touched)">
+          </div>
+          <div *ngIf="f['nombre'].invalid && (f['nombre'].dirty || f['nombre'].touched)" class="mt-1 text-sm text-red-600">
+            <div *ngIf="f['nombre'].errors?.['required']">
+              El nombre es requerido.
+            </div>
+          </div>
+        </div>
+
+        <!-- Campo Email -->
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
+            Email
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
+            </div>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+              placeholder="tu@email.com"
+              [class.border-red-300]="f['email'].invalid && (f['email'].dirty || f['email'].touched)">
+          </div>
+          <div *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)" class="mt-1 text-sm text-red-600">
+            <div *ngIf="f['email'].errors?.['required']">
+              El email es requerido.
+            </div>
+            <div *ngIf="f['email'].errors?.['email']">
+              Por favor, introduce un email válido.
+            </div>
+          </div>
+        </div>
+
+        <!-- Campo Contraseña -->
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
+            Contraseña
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+              </svg>
+            </div>
+            <input
+              id="password"
+              type="password"
+              formControlName="password"
+              class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+              placeholder="••••••••"
+              [class.border-red-300]="f['password'].invalid && (f['password'].dirty || f['password'].touched)">
+          </div>
+          <div *ngIf="f['password'].invalid && (f['password'].dirty || f['password'].touched)" class="mt-1 text-sm text-red-600">
+            <div *ngIf="f['password'].errors?.['required']">
+              La contraseña es requerida.
+            </div>
+            <div *ngIf="f['password'].errors?.['minlength']">
+              La contraseña debe tener al menos 6 caracteres.
+            </div>
+          </div>
+        </div>
+
+        <!-- Botón de submit -->
+        <div>
+          <button
+            type="submit"
+            [disabled]="registerForm.invalid || isSubmitting"
+            class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+          >
+            <span *ngIf="isSubmitting" class="flex items-center">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Registrando...
+            </span>
+            <span *ngIf="!isSubmitting">
+              Registrarse
+            </span>
+          </button>
+        </div>
+
+        <!-- Mensaje de error -->
+        <div *ngIf="error" class="rounded-lg bg-red-50 border border-red-200 p-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <div class="ml-3">
+              <h3 class="text-sm font-medium text-red-800">
+                {{ error }}
+              </h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enlace a login -->
+        <div class="text-sm text-center">
+          <span class="text-gray-600">¿Ya tienes una cuenta?</span>
+          <a routerLink="/login" class="font-medium text-indigo-600 hover:text-indigo-500 ml-1 transition-colors duration-200">
+            Inicia sesión aquí
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
