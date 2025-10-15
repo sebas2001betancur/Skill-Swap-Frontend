@@ -1,0 +1,106 @@
+// src/app/pages/proponer-intercambio/proponer-intercambio.component.scss
+
+// Animaciones personalizadas
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+// Estilos para form fields
+::ng-deep .mat-mdc-form-field {
+  .mat-mdc-text-field-wrapper {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 0.75rem;
+  }
+
+  .mdc-notched-outline {
+    border-radius: 0.75rem;
+    border-color: rgba(0, 0, 0, 0.12);
+  }
+
+  .mdc-notched-outline--notched .mdc-notched-outline__leading,
+  .mdc-notched-outline--notched .mdc-notched-outline__notch,
+  .mdc-notched-outline--notched .mdc-notched-outline__trailing {
+    border-top: 2px solid #667eea;
+  }
+}
+
+// Estilos para chips
+::ng-deep .mat-mdc-chip {
+  border-radius: 1rem;
+  font-weight: 600;
+}
+
+// Botones con gradientes
+.mat-mdc-raised-button {
+  border-radius: 0.75rem;
+  font-weight: 600;
+  text-transform: none;
+  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+  }
+}
+
+.mat-mdc-outlined-button {
+  border-radius: 0.75rem;
+  font-weight: 600;
+  text-transform: none;
+  border-width: 2px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Cards con efectos hover
+.intercambio-card {
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.15);
+  }
+}
+
+// Imágenes de cursos
+.curso-image {
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+// Responsive design
+@media (max-width: 640px) {
+  .mat-mdc-raised-button,
+  .mat-mdc-outlined-button {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+}

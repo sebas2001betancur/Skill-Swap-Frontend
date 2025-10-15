@@ -1,0 +1,216 @@
+/* curso-preview.component.scss */
+/* Estilos generales */
+.curso-preview-page {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
+  padding: 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    padding: 16px;
+    gap: 24px;
+  }
+}
+
+/* Contenido principal */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  h1,
+  h2 {
+    margin: 0;
+    color: #333;
+  }
+
+  .curso-titulo {
+    font-size: 2.5rem;
+    line-height: 1.2;
+    color: #2c3e50;
+  }
+
+  .creator-info {
+    font-size: 1.1rem;
+    color: #7f8c8d;
+    margin-bottom: 8px;
+  }
+
+  .main-image {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .descripcion,
+  .aprenderas,
+  .curriculum {
+    h2 {
+      font-size: 1.6rem;
+      color: #2c3e50;
+      margin-bottom: 12px;
+    }
+
+    p {
+      line-height: 1.6;
+      color: #555;
+    }
+  }
+
+  .punto-clave {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 8px;
+
+    .check-icon {
+      color: #27ae60;
+      font-weight: bold;
+    }
+  }
+
+  .leccion-item {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    color: #34495e;
+
+    .leccion-label {
+      font-size: 0.9rem;
+      color: #7f8c8d;
+    }
+  }
+
+  .locked-content {
+    padding: 16px;
+    text-align: center;
+    background-color: #f8f9fa;
+    border: 1px dashed #bdc3c7;
+    border-radius: 6px;
+    margin-top: 8px;
+    opacity: 0.8;
+
+    .lock-icon {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+    }
+
+    .locked-text {
+      color: #e74c3c;
+      font-weight: bold;
+    }
+  }
+}
+
+/* Sidebar CTA */
+.sidebar-cta {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  @media (max-width: 900px) {
+    order: -1; // Mueve el sidebar arriba en móvil
+  }
+}
+
+.cta-box {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 350px;
+  align-self: flex-start;
+  position: sticky;
+  top: 20px;
+
+  h3 {
+    margin-top: 0;
+    color: #2c3e50;
+    font-size: 1.5rem;
+  }
+
+  .price {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #27ae60;
+    margin: 12px 0;
+  }
+
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &.btn-primary {
+      background-color: #3498db;
+      color: white;
+
+      &:hover {
+        background-color: #2980b9;
+      }
+    }
+
+    &.btn-secondary {
+      background-color: transparent;
+      color: #3498db;
+      border: 2px solid #3498db;
+
+      &:hover {
+        background-color: #f1f8ff;
+      }
+    }
+  }
+
+  hr {
+    border: none;
+    height: 1px;
+    background-color: #ecf0f1;
+    margin: 20px 0;
+  }
+
+  .incluso-title {
+    margin-bottom: 12px;
+    color: #2c3e50;
+  }
+
+  .incluso-list {
+    padding-left: 0;
+    list-style: none;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      color: #555;
+    }
+
+    .icon {
+      font-size: 1.2rem;
+    }
+  }
+}
+
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.5rem;
+  color: #7f8c8d;
+}

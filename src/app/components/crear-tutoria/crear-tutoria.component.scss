@@ -1,0 +1,46 @@
+// crear-tutoria.component.scss - Estilos mínimos para select HTML estándar
+
+// Estilos específicos para componentes de Angular Material
+::ng-deep {
+  .mat-datepicker-toggle {
+    color: rgb(156 163 175);
+  }
+
+  .mat-datepicker-toggle:hover {
+    color: rgb(59 130 246);
+  }
+}
+
+// Asegurar que los select HTML estándar funcionen correctamente
+select {
+  position: relative;
+  z-index: 10;
+}
+
+select:focus {
+  z-index: 20;
+  outline: none;
+  border-color: rgb(59 130 246);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+// Contenedores con posición relativa
+.min-h-screen {
+  position: relative;
+}
+
+.max-w-4xl {
+  position: relative;
+  z-index: 1;
+}
+
+.bg-white {
+  position: relative;
+  z-index: 2;
+}
+
+// Asegurar que el formulario tenga suficiente espacio para dropdowns
+form {
+  position: relative;
+  z-index: 10;
+}

@@ -1,0 +1,101 @@
+// src/app/pages/mis-intercambios/mis-intercambios.component.scss
+
+// Animaciones personalizadas
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+// Estilos para las tabs
+::ng-deep .mat-mdc-tab-group {
+  .mat-mdc-tab-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 1.5rem 1.5rem 0 0;
+  }
+
+  .mat-mdc-tab {
+    .mdc-tab {
+      color: rgba(255, 255, 255, 0.8);
+
+      &.mdc-tab--active {
+        color: white;
+      }
+    }
+
+    .mdc-tab-indicator {
+      background-color: white;
+    }
+  }
+}
+
+// Estilos para chips
+::ng-deep .mat-mdc-chip {
+  border-radius: 1rem;
+  font-weight: 600;
+}
+
+// Botones con gradientes
+.mat-mdc-raised-button {
+  border-radius: 0.75rem;
+  font-weight: 600;
+  text-transform: none;
+  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px 0 rgba(0, 0, 0, 0.2);
+  }
+}
+
+.mat-mdc-outlined-button {
+  border-radius: 0.75rem;
+  font-weight: 600;
+  text-transform: none;
+  border-width: 2px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Cards con efectos hover
+.intercambio-card {
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.15);
+  }
+}
+
+// Iconos de estado
+.estado-icon {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+// Responsive design
+@media (max-width: 640px) {
+  .intercambio-card {
+    margin-bottom: 1rem;
+  }
+
+  .mat-mdc-raised-button,
+  .mat-mdc-outlined-button {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}

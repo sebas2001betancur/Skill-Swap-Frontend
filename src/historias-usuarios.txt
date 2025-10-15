@@ -1,0 +1,183 @@
+HU07 - Gestionar solicitudes de tutoría (Mentor) ⚠️ ALTA PRIORIDAD
+
+Revisar solicitudes pendientes de estudiantes
+Aceptar/Rechazar solicitudes
+Ver estudiantes aceptados
+Notificar a estudiantes cuando se cancela
+
+Yo como mentor requiero revisar y gestionar las solicitudes de estudiantes
+que quieren participar en mis tutorías para aceptar o rechazar según
+disponibilidad.
+CRITERIOS DE ACEPTACIÓN
+# CRITERIO ACCIÓN RESULTADO ESPERADO
+1 Ir a "Mis
+Tutorías" y ver
+El sistema muestra badge con número de solicitudes
+pendientes en cada tutoría
+solicitudes
+pendientes
+2 Abrir
+solicitudes de
+una tutoría
+El sistema muestra lista con: Nombre del estudiante,
+Semestre, Mensaje (si hay), botones "Aceptar" y
+"Rechazar"
+3 Aceptar una
+solicitud con
+cupos
+disponibles
+El sistema cambia estado a "Aceptada", reduce cupos
+disponibles en 1, notifica al estudiante y muestra
+"Solicitud aceptada"
+4 Aceptar
+solicitud
+cuando ya no
+hay cupos
+El sistema no permite y muestra "No hay cupos
+disponibles"
+5
+Rechazar una
+solicitud
+El sistema muestra campo "Razón del rechazo"
+(opcional), cambia estado a "Rechazada" 
+estudiante
+ 6
+Ver
+estudiantes
+aceptados
+El sistema muestra lista de participantes confirmados con
+su información de contacto
+ 7
+Cancelar
+tutoría con
+estudiantes
+aceptados
+El sistema requiere confirmación "¿Seguro? Esto
+notificará a los X estudiantes aceptados" y al confirmar
+notifica a todos
+
+HU09 - Ver perfil público de mentor 📊 PRIORIDAD MEDIA
+
+Ver perfil completo del mentor
+Ver calificaciones y comentarios
+Ver próximas tutorías del mentor
+Ver estadísticas (total estudiantes ayudados, tasa asistencia)
+
+HU10 - Cancelar tutoría (Mentor) 🗑️ PRIORIDAD MEDIA
+
+Cancelar tutoría programada
+Notificar a estudiantes aceptados
+Advertencia si cancela 1 hora antes
+
+HU11 - Panel de administración básico 👨‍💼 PRIORIDAD BAJA
+
+Dashboard con estadísticas
+Gestión de usuarios
+Moderar contenido inapropiado
+Generar reportes de uso
+
+HU12 - Gestionar catálogo de materias 📚 PRIORIDAD BAJA
+
+CRUD de materias del pensum
+Activar/Desactivar materias
+Validar códigos únicos
+
+
+✅ Historias de Usuario IMPLEMENTADAS:
+
+✅ HU01 - Registro de Usuario
+✅ HU02 - Inicio de sesión
+✅ HU03 - Configurar perfil de mentor
+✅ HU04 - Crear oferta de tutoría (acabamos de arreglarlo)
+✅ HU05 - Buscar tutorías disponibles
+DESCRIPCIÓN Yo como estudiante requiero buscar y filtrar tutorías disponibles por
+materia y modalidad para encontrar la ayuda académica que necesito.
+CRITERIOS DE ACEPTACIÓN
+# CRITERIO ACCIÓN RESULTADO ESPERADO
+1 Ingresar a
+"Buscar Tutorías"
+El sistema muestra lista de tutorías disponibles con
+filtros: Materia, Modalidad, Fecha, Nivel, y barra de
+búsqueda
+2 Seleccionar filtro
+"Materia:
+Programación
+Orientada a
+Objetos"
+El sistema muestra solo tutorías de esa materia con
+información: Título, Mentor, Calificación del mentor,
+Fecha/hora, Modalidad, Cupos disponibles
+3 Seleccionar filtro
+"Modalidad:
+Virtual"
+El sistema filtra y muestra solo tutorías virtuales
+4 Seleccionar filtro
+"Nivel: Intermedio"
+El sistema filtra y muestra solo tutorías de nivel intermedio
+5 Aplicar múltiples
+filtros
+simultáneamente
+El sistema aplica filtros en conjunto (AND lógico)
+6 Buscar por
+término en barra
+de búsqueda
+El sistema busca en título, descripción, nombre del mentor
+y materia de la tutoría
+7 No hay tutorías
+que coincidan
+con los filtros
+El sistema muestra "No se encontraron tutorías con
+estos criterios" y botón "Limpiar filtros"
+8 Ver tutorías que
+ya no tienen
+cupos disponibles
+El sistema muestra badge "Cupos llenos" en la tarjeta,
+deshabilita el clic en la tarjeta, y oculta/deshabilita
+el botón "Solicitar participación"
+
+✅ HU06 - Solicitar participación en tutoría
+Presionar
+botón
+"Solicitar" en
+una tutoría
+El sistema muestra modal con: Detalles de la tutoría,
+campo "Mensaje al mentor" (opcional), botones "Enviar
+solicitud" y "Cancelar"
+2 Enviar
+solicitud sin
+mensaje
+El sistema permite enviar sin mensaje y crea solicitud con
+estado "Pendiente"
+3 Enviar
+solicitud con
+mensaje (máx
+500
+caracteres)
+El sistema guarda mensaje, crea solicitud y muestra
+"Solicitud enviada. El mentor la revisará pronto"
+4 Intentar
+solicitar una
+El sistema muestra "Ya tienes una solicitud pendiente
+para esta tutoría"
+tutoría que ya
+solicité
+5
+Solicitar
+tutoría sin
+cupos
+disponibles
+El sistema deshabilita botón y muestra "Cupos llenos"
+ 6
+Solicitar
+tutoría que ya
+pasó
+El sistema no permite y muestra "Esta tutoría ya no está
+disponible"
+ 7
+Ver mis
+solicitudes
+pendientes
+El sistema muestra lista en "Mis Solicitudes" con estados:
+Pendiente (amarillo), Aceptada (verde), Rechazada (rojo)
+✅ HU08 - Calificar tutoría recibida
+

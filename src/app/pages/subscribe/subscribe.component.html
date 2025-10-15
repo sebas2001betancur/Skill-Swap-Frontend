@@ -1,0 +1,17 @@
+<div class="subscribe-container">
+  <h2>Conviértete en Miembro Premium</h2>
+  <p>Accede a todos los cursos y funcionalidades exclusivas por solo $12,900 COP al mes.</p>
+  
+  <!-- El Widget de Wompi se renderizará dentro de este formulario -->
+  <form id="payment-form">
+    <!-- Puedes añadir campos para el nombre del titular de la tarjeta si lo deseas -->
+  </form>
+  
+  <button class="btn-pay" (click)="pay()" [disabled]="isProcessing">
+    {{ isProcessing ? 'Procesando...' : 'Pagar Suscripción' }}
+  </button>
+
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+</div>

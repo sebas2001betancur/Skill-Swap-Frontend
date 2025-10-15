@@ -1,0 +1,342 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Header -->
+    <div class="mb-12 text-center">
+      <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl mb-6 shadow-2xl transform hover:scale-105 transition-transform">
+        <mat-icon class="text-white !text-4xl">school</mat-icon>
+      </div>
+      <h1 class="text-5xl md:text-6xl font-black bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent mb-4">
+        Buscar Tutorías
+      </h1>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+        Encuentra la tutoría perfecta para mejorar tus habilidades y alcanzar tus metas académicas
+      </p>
+    </div>
+
+    <!-- Filtros de búsqueda -->
+    <div class="bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl border border-white/20 p-8 mb-12 relative overflow-hidden">
+      <!-- Decoración de fondo -->
+      <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+      
+      <!-- Indicador de filtros activos -->
+      <div *ngIf="hasActiveFilters()" class="absolute top-6 right-6 z-10 bg-gradient-to-r from-green-500 to-teal-500 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg animate-pulse">
+        <mat-icon class="!text-sm mr-1">filter_list</mat-icon>
+        {{ getActiveFiltersCount() }} filtro(s) activo(s)
+      </div>
+
+      <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
+
+           <!-- Búsqueda por texto -->
+           <div class="md:col-span-2 lg:col-span-3">
+             <label for="busqueda" class="block text-sm font-bold text-gray-900 mb-2">
+               <mat-icon class="!text-base align-middle mr-1">search</mat-icon>
+               Buscar por título o descripción
+             </label>
+             <div class="relative">
+               <mat-icon class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">search</mat-icon>
+               <input
+                 id="busqueda"
+                 type="text"
+                 formControlName="busqueda"
+                 placeholder="Ej: Matemáticas básicas, Cálculo integral..."
+                 class="w-full pl-12 pr-4 py-4 text-base border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white">
+            </div>
+          </div>
+
+           <!-- Filtro por materia -->
+           <div>
+             <label for="materia" class="block text-sm font-bold text-gray-900 mb-2">
+               <mat-icon class="!text-base align-middle mr-1">school</mat-icon>
+               Materia
+             </label>
+             <div class="relative">
+               <mat-icon class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none z-0">book</mat-icon>
+               <select
+                 id="materia"
+                 formControlName="materia"
+                 class="relative z-10 w-full pl-12 pr-10 py-4 text-base border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white cursor-pointer appearance-none"
+                 style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-repeat: no-repeat; background-position: right 0.75rem center; background-size: 1.25em 1.25em;">
+                <option value="">Todas las materias</option>
+                <option *ngFor="let materia of materiasDisponibles" [value]="materia">
+                  {{ materia }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+           <!-- Filtro por nivel -->
+           <div>
+             <label for="nivel" class="block text-sm font-bold text-gray-900 mb-2">
+               <mat-icon class="!text-base align-middle mr-1">trending_up</mat-icon>
+               Nivel requerido
+             </label>
+             <div class="relative">
+               <mat-icon class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none z-0">signal_cellular_alt</mat-icon>
+               <select
+                 id="nivel"
+                 formControlName="nivel"
+                 class="relative z-10 w-full pl-12 pr-10 py-4 text-base border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white cursor-pointer appearance-none"
+                 style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-repeat: no-repeat; background-position: right 0.75rem center; background-size: 1.25em 1.25em;">
+                <option value="">Todos los niveles</option>
+                <option *ngFor="let nivel of niveles" [value]="nivel">
+                  {{ nivel }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+           <!-- Filtro por modalidad -->
+           <div>
+             <label for="modalidad" class="block text-sm font-bold text-gray-900 mb-2">
+               <mat-icon class="!text-base align-middle mr-1">meeting_room</mat-icon>
+               Modalidad
+             </label>
+             <div class="relative">
+               <mat-icon class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none z-0">videocam</mat-icon>
+               <select
+                 id="modalidad"
+                 formControlName="modalidad"
+                 class="relative z-10 w-full pl-12 pr-10 py-4 text-base border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white cursor-pointer appearance-none"
+                 style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-repeat: no-repeat; background-position: right 0.75rem center; background-size: 1.25em 1.25em;">
+                <option value="">Todas las modalidades</option>
+                <option *ngFor="let modalidad of modalidades" [value]="modalidad">
+                  {{ modalidad }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+           <!-- Filtro por fecha -->
+           <div class="md:col-span-2 lg:col-span-3">
+             <label for="fecha" class="block text-sm font-bold text-gray-900 mb-2">
+               <mat-icon class="!text-base align-middle mr-1">calendar_today</mat-icon>
+               Fecha específica (opcional)
+             </label>
+             <div class="relative">
+               <mat-icon class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none z-0">event</mat-icon>
+               <input
+                 id="fecha"
+                 type="date"
+                 formControlName="fecha"
+                 class="relative z-10 w-full pl-12 pr-4 py-4 text-base border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white cursor-pointer">
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="flex flex-col sm:flex-row gap-4 mt-8 pt-6 border-t-2 border-gray-100">
+          <button 
+            type="submit"
+            class="flex-1 sm:flex-none px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold text-base disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            [disabled]="isLoading">
+            <mat-spinner *ngIf="isLoading" diameter="20" class="mr-2"></mat-spinner>
+            <mat-icon *ngIf="!isLoading">search</mat-icon>
+            <span>{{ isLoading ? 'Buscando...' : 'Buscar Tutorías' }}</span>
+          </button>
+          
+          <button 
+            type="button"
+            class="flex-1 sm:flex-none px-6 py-4 rounded-xl border-2 border-purple-300 hover:bg-purple-50 transition-all duration-300 text-purple-700 font-bold flex items-center justify-center gap-2"
+            (click)="onClearFilters()" 
+            [disabled]="isLoading">
+            <mat-icon>refresh</mat-icon>
+            Limpiar Filtros
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Resultados -->
+    <div class="space-y-8">
+      <!-- Filtros aplicados -->
+      <div *ngIf="hasActiveFilters() && !isLoading" class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-5 border-2 border-blue-200 shadow-md">
+        <div class="flex items-center justify-between flex-wrap gap-3">
+          <div class="flex items-center gap-3 flex-wrap">
+            <mat-icon class="text-blue-600">filter_list</mat-icon>
+            <span class="text-sm font-bold text-blue-900">Filtros aplicados:</span>
+            <div class="flex flex-wrap gap-2">
+              <span *ngFor="let filter of getActiveFiltersList()" 
+                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white text-blue-700 border border-blue-200">
+                {{ filter }}
+              </span>
+            </div>
+          </div>
+          <button 
+            type="button"
+            class="text-blue-600 hover:bg-blue-100 rounded-full p-2 transition-colors"
+            (click)="onClearFilters()">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div *ngIf="isLoading" class="flex flex-col items-center justify-center py-24">
+        <div class="relative mb-6">
+          <div class="w-20 h-20 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+          <div class="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full animate-pulse opacity-20"></div>
+        </div>
+        <p class="text-gray-700 text-xl font-bold">Buscando las mejores tutorías...</p>
+        <p class="text-gray-500 text-sm mt-2">Esto solo tomará un momento</p>
+      </div>
+
+      <!-- Lista de tutorías -->
+      <div *ngIf="!isLoading && tutorias.length > 0">
+        <!-- Contador de resultados -->
+        <div class="mb-6 flex items-center justify-between">
+          <p class="text-gray-700 font-bold text-lg">
+            Se encontraron <span class="text-blue-600">{{ totalItems }}</span> tutoría(s)
+          </p>
+        </div>
+
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+           <div *ngFor="let tutoria of tutorias; trackBy: trackByTutoriaId"
+                 class="group bg-white/95 backdrop-blur-sm border-2 border-gray-100 rounded-2xl shadow-md hover:shadow-2xl hover:border-blue-300 transition-all duration-300 transform hover:-translate-y-2 overflow-hidden"
+                 [ngClass]="{
+                   'cursor-pointer': tutoria.cuposDisponibles > 0,
+                   'cursor-not-allowed opacity-60': tutoria.cuposDisponibles === 0
+                 }"
+                 [routerLink]="tutoria.cuposDisponibles > 0 ? ['/tutorias', tutoria.id] : null">
+
+            <!-- Header con gradiente -->
+            <div class="relative h-24 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 p-4">
+               <!-- Estado badge -->
+               <div class="absolute top-3 right-3 flex flex-col gap-1">
+                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white/90 backdrop-blur-sm shadow-lg"
+                       [ngClass]="{
+                         'text-green-700': tutoria.estado === 'Disponible',
+                         'text-orange-700': tutoria.estado === 'EnCurso',
+                         'text-red-700': tutoria.estado === 'Cancelada',
+                         'text-gray-700': tutoria.estado === 'Finalizada'
+                       }">
+                   <mat-icon class="!text-sm mr-1">{{ getEstadoIcon(tutoria.estado) }}</mat-icon>
+                   {{ tutoria.estado }}
+                 </span>
+                 <!-- Cupos llenos badge -->
+                 <span *ngIf="tutoria.cuposDisponibles === 0"
+                       class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-red-500 text-white shadow-lg">
+                   <mat-icon class="!text-sm mr-1">group</mat-icon>
+                   Cupos llenos
+                 </span>
+               </div>
+
+              <!-- Ícono de modalidad -->
+              <div class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-xl">
+                <mat-icon class="text-white !text-2xl">{{ getModalidadIcon(tutoria.modalidad) }}</mat-icon>
+              </div>
+            </div>
+
+            <!-- Contenido -->
+            <div class="p-5 space-y-4">
+              <!-- Título -->
+              <div>
+                <h3 class="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2 mb-2">
+                  {{ tutoria.titulo }}
+                </h3>
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="inline-flex items-center px-2 py-1 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold">
+                    <mat-icon class="!text-xs mr-1">{{ getModalidadIcon(tutoria.modalidad) }}</mat-icon>
+                    {{ tutoria.modalidad }}
+                  </span>
+                  <span class="inline-flex items-center px-2 py-1 rounded-lg bg-purple-50 text-purple-700 text-xs font-bold">
+                    <mat-icon class="!text-xs mr-1">trending_up</mat-icon>
+                    {{ tutoria.nivelRequerido }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Descripción -->
+              <p class="text-gray-600 text-sm line-clamp-2 leading-relaxed">
+                {{ tutoria.descripcion }}
+              </p>
+
+              <!-- Detalles -->
+              <div class="space-y-2">
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 group-hover:from-blue-100 group-hover:to-indigo-100 transition-colors">
+                  <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center shadow-md">
+                    <mat-icon class="text-white !text-base">event</mat-icon>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs text-gray-600 font-bold">Fecha y hora</p>
+                    <p class="text-sm text-gray-900 font-bold truncate">{{ formatFecha(tutoria.fechaHora) }}</p>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 group-hover:from-green-100 group-hover:to-emerald-100 transition-colors">
+                  <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center shadow-md">
+                    <mat-icon class="text-white !text-base">school</mat-icon>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs text-gray-600 font-bold">Materia</p>
+                    <p class="text-sm text-gray-900 font-bold truncate">{{ tutoria.materia }}</p>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-orange-50 to-amber-50 group-hover:from-orange-100 group-hover:to-amber-100 transition-colors">
+                  <div class="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center shadow-md">
+                    <mat-icon class="text-white !text-base">group</mat-icon>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs text-gray-600 font-bold">Cupos disponibles</p>
+                    <p class="text-sm text-gray-900 font-bold">{{ tutoria.cuposDisponibles }}/{{ tutoria.cupoMaximo }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Mentor info -->
+              <div class="pt-4 border-t-2 border-gray-100">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 bg-gradient-to-r from-gray-400 to-gray-600 rounded-full flex items-center justify-center shadow-md">
+                    <mat-icon class="text-white !text-lg">person</mat-icon>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs text-gray-600 font-bold">Mentor</p>
+                    <p class="text-sm text-gray-900 font-bold truncate">{{ tutoria.mentorNombre || 'Mentor' }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Sin resultados -->
+      <div *ngIf="!isLoading && tutorias.length === 0" class="text-center py-24">
+        <div class="w-32 h-32 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl">
+          <mat-icon class="text-gray-500 !text-6xl">search_off</mat-icon>
+        </div>
+        <h3 class="text-3xl font-black text-gray-900 mb-4">No se encontraron tutorías</h3>
+        <p class="text-gray-600 mb-8 max-w-md mx-auto text-lg">
+          No hay tutorías disponibles con los filtros seleccionados. Intenta ajustar los criterios de búsqueda.
+        </p>
+        <button 
+          type="button"
+          class="px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold"
+          (click)="onClearFilters()">
+          <mat-icon class="mr-2">refresh</mat-icon>
+          Limpiar filtros
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Paginación -->
+    <div *ngIf="!isLoading && totalItems > pageSize" class="mt-12 flex justify-center">
+      <div class="bg-white rounded-2xl shadow-lg p-4">
+        <mat-paginator
+          [length]="totalItems"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="[8, 16, 24, 32]"
+          (page)="onPageChange($event)"
+          showFirstLastButtons
+          class="bg-transparent">
+        </mat-paginator>
+      </div>
+    </div>
+
+  </div>
+</div>

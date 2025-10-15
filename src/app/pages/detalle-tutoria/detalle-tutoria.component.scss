@@ -1,0 +1,25 @@
+// detalle-tutoria.component.scss
+.detalle-tutoria-container {
+  min-height: 100vh;
+  background-color: #f9fafb;
+}
+
+mat-card {
+  margin-bottom: 1rem;
+}
+
+mat-chip {
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .detalle-tutoria-container {
+    padding: 1rem;
+  }
+
+  .grid-cols-1.lg\\:grid-cols-3 {
+    grid-template-columns: 1fr;
+  }
+}

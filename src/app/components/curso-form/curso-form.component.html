@@ -1,197 +1,463 @@
-<!-- Contenedor principal con diseño moderno -->
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-3xl mx-auto">
-    <div class="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
-      <!-- Encabezado con icono dinámico -->
-      <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-8 sm:px-8">
-        <div class="flex items-start gap-4">
-          <div class="flex-shrink-0">
-            <div class="h-12 w-12 rounded-full bg-white bg-opacity-20 flex items-center justify-center">
-              <svg *ngIf="!isEditMode" class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-              </svg>
-              <svg *ngIf="isEditMode" class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-              </svg>
-            </div>
+<!-- curso-form.component.html - VERSIÓN COMPLETA -->
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-5xl mx-auto">
+    
+    <!-- Header Card -->
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
+      <div class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 px-8 py-12">
+        <div class="flex items-center gap-6">
+          <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+            <mat-icon class="text-white !text-4xl !w-10 !h-10">library_add</mat-icon>
           </div>
           <div>
-            <h2 class="text-2xl font-bold text-white">
-              {{ isEditMode ? 'Editar Curso' : 'Crear Nuevo Curso' }}
-            </h2>
-            <p class="mt-1 text-indigo-100">
-              {{ isEditMode ? 'Actualiza los detalles de tu curso existente.' : 'Completa el formulario para añadir un nuevo curso al catálogo.' }}
-            </p>
+            <h1 class="text-4xl font-black text-white mb-3 tracking-tight">Crear Nuevo Curso</h1>
+            <p class="text-lg text-indigo-100">Completa los campos para publicar tu curso</p>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Formulario reactivo -->
-      <form [formGroup]="cursoForm" (ngSubmit)="onSubmit()" novalidate class="px-6 py-8 sm:px-8">
-        <!-- Sección de información básica -->
-        <div class="mb-8">
-          <h3 class="text-lg font-semibold text-gray-900 mb-6 pb-2 border-b border-gray-200">
-            Información Básica
-          </h3>
+    <!-- Form Card -->
+    <form [formGroup]="cursoForm" (ngSubmit)="onSubmit()" class="bg-white rounded-2xl shadow-xl p-8 lg:p-12 space-y-10">
+      
+      <!-- Información Básica -->
+      <section>
+        <div class="flex items-center gap-3 mb-8 pb-4 border-b-2 border-gray-100">
+          <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
+            <mat-icon class="text-indigo-600 !text-xl">article</mat-icon>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900">Información Básica</h2>
+        </div>
+        
+        <div class="space-y-6">
+           <!-- Nombre -->
+           <div>
+             <label for="nombre" class="block text-sm font-semibold text-gray-900 mb-2">
+               Nombre del Curso <span class="text-red-500">*</span>
+             </label>
+             <input
+               id="nombre"
+               type="text"
+               formControlName="nombre"
+               placeholder="Ej: Desarrollo Web Full Stack con Angular y .NET"
+               maxlength="200"
+               class="w-full px-4 py-3.5 text-base border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400"
+               [class.border-red-300]="showError('nombre')"
+               [class.bg-red-50]="showError('nombre')">
+            <div class="flex justify-between items-center mt-2">
+              <span class="text-sm text-red-600 font-medium" *ngIf="showError('nombre')">
+                {{ getFieldError('nombre') }}
+              </span>
+              <span class="text-xs text-gray-500 ml-auto">
+                {{ cursoForm.get('nombre')?.value?.length || 0 }}/200
+              </span>
+            </div>
+          </div>
+
+           <!-- Descripción Corta -->
+           <div>
+             <label for="descripcion" class="block text-sm font-semibold text-gray-900 mb-2">
+               Descripción Corta <span class="text-red-500">*</span>
+             </label>
+             <textarea
+               id="descripcion"
+               formControlName="descripcion"
+               placeholder="Breve descripción que aparecerá en las tarjetas de cursos..."
+               rows="4"
+               maxlength="900"
+               class="w-full px-4 py-3.5 text-base border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all resize-none placeholder:text-gray-400"
+               [class.border-red-300]="showError('descripcion')"
+               [class.bg-red-50]="showError('descripcion')"></textarea>
+            <div class="flex justify-between items-center mt-2">
+              <span class="text-sm text-red-600 font-medium" *ngIf="showError('descripcion')">
+                {{ getFieldError('descripcion') }}
+              </span>
+              <span class="text-xs text-gray-500 ml-auto">
+                {{ cursoForm.get('descripcion')?.value?.length || 0 }}/900
+              </span>
+            </div>
+          </div>
+
+           <!-- Descripción Larga -->
+           <div>
+             <label for="descripcionLarga" class="block text-sm font-semibold text-gray-900 mb-2">
+               Descripción Detallada
+             </label>
+             <textarea
+               id="descripcionLarga"
+               formControlName="descripcionLarga"
+               placeholder="Describe en detalle el contenido, metodología y beneficios del curso..."
+               rows="6"
+               maxlength="2000"
+               class="w-full px-4 py-3.5 text-base border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all resize-y placeholder:text-gray-400"></textarea>
+            <div class="flex justify-between items-center mt-2">
+              <span class="text-xs text-gray-500">Mínimo 100 caracteres recomendados</span>
+              <span class="text-xs text-gray-500">
+                {{ cursoForm.get('descripcionLarga')?.value?.length || 0 }}/2000
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Puntos Clave -->
+      <section>
+        <div class="flex items-center gap-3 mb-8 pb-4 border-b-2 border-gray-100">
+          <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+            <mat-icon class="text-green-600 !text-xl">check_circle</mat-icon>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900">¿Qué Aprenderán?</h2>
+        </div>
+
+        <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 space-y-4">
+          <p class="text-sm text-gray-600">Añade entre 3 y 10 puntos clave</p>
           
-          <!-- Campo: Nombre -->
-          <div class="mb-6">
-            <label for="nombre" class="block text-sm font-medium text-gray-700 mb-2">
-              Nombre del Curso*
-            </label>
+          <div class="flex gap-3">
             <input 
               type="text" 
-              id="nombre" 
-              formControlName="nombre"
-              class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
-              placeholder="Ej: Angular desde cero"
-              [class.border-red-300]="showError('nombre')">
-            <div class="mt-1 text-sm text-red-600" *ngIf="showError('nombre')">
-              <span *ngIf="cursoForm.get('nombre')?.errors?.['required']">El nombre es obligatorio</span>
-              <span *ngIf="cursoForm.get('nombre')?.errors?.['maxlength']">Máximo 100 caracteres</span>
+              [(ngModel)]="nuevoPunto" 
+              [ngModelOptions]="{standalone: true}"
+              (keyup.enter)="agregarPuntoClave()"
+              placeholder="Ej: Crear aplicaciones web con Angular"
+              class="flex-1 px-4 py-3.5 text-base border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400">
+            <button 
+              type="button" 
+              (click)="agregarPuntoClave()"
+              [disabled]="!nuevoPunto.trim() || puntosClave.length >= 10"
+              class="px-6 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-all shadow-md hover:shadow-lg active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap">
+              Agregar
+            </button>
+          </div>
+
+          <div class="space-y-2 min-h-[100px]" *ngIf="puntosClave.length > 0">
+            <div 
+              *ngFor="let punto of puntosClave; let i = index"
+              class="flex items-center gap-3 p-4 bg-white rounded-lg shadow-sm border border-gray-200 hover:border-indigo-300 transition-all group">
+              <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                </svg>
+              </div>
+              <span class="flex-1 text-gray-700 break-words">{{ punto }}</span>
+              <button 
+                type="button" 
+                (click)="eliminarPuntoClave(i)"
+                class="opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition-all flex-shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
             </div>
           </div>
 
-          <!-- Campo: Descripción -->
-          <div class="mb-6">
-            <label for="descripcion" class="block text-sm font-medium text-gray-700 mb-2">
-              Descripción*
-            </label>
-            <textarea 
-              id="descripcion" 
-              formControlName="descripcion" 
-              class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
-              rows="4"
-              placeholder="Describe el contenido y objetivos del curso"
-              [class.border-red-300]="showError('descripcion')"></textarea>
-            <div class="mt-1 text-sm text-red-600" *ngIf="showError('descripcion')">
-              <span *ngIf="cursoForm.get('descripcion')?.errors?.['required']">La descripción es obligatoria</span>
+          <div *ngIf="puntosClave.length === 0" class="text-center py-8 text-gray-500">
+            <mat-icon class="!text-4xl mb-2 text-gray-400">lightbulb_outline</mat-icon>
+            <p class="text-sm">Aún no has agregado puntos clave</p>
+          </div>
+
+          <div class="flex items-center justify-between pt-2 border-t border-gray-200">
+            <span class="text-sm text-gray-600">{{ puntosClave.length }} de 10 puntos</span>
+            <span class="text-xs text-gray-500" *ngIf="puntosClave.length < 3">Mínimo 3 requeridos</span>
+            <span class="text-xs text-green-600 font-semibold" *ngIf="puntosClave.length >= 3">✓ Completo</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Metadatos -->
+      <section>
+        <div class="flex items-center gap-3 mb-8 pb-4 border-b-2 border-gray-100">
+          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+            <mat-icon class="text-blue-600 !text-xl">schedule</mat-icon>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900">Información del Contenido</h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+           <div>
+             <label for="duracionHoras" class="block text-sm font-semibold text-gray-900 mb-2">Duración (horas)</label>
+             <input
+               id="duracionHoras"
+               type="number"
+               formControlName="duracionHoras"
+               min="1"
+               placeholder="5"
+               class="w-full px-4 py-3.5 text-base border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all">
+          </div>
+           <div>
+             <label for="numeroArticulos" class="block text-sm font-semibold text-gray-900 mb-2">N° Artículos</label>
+             <input
+               id="numeroArticulos"
+               type="number"
+               formControlName="numeroArticulos"
+               min="0"
+               placeholder="12"
+               class="w-full px-4 py-3.5 text-base border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all">
+          </div>
+           <div>
+             <label for="numeroLecciones" class="block text-sm font-semibold text-gray-900 mb-2">N° Lecciones</label>
+             <input
+               id="numeroLecciones"
+               type="number"
+               formControlName="numeroLecciones"
+               min="1"
+               placeholder="20"
+               class="w-full px-4 py-3.5 text-base border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all">
+          </div>
+        </div>
+      </section>
+
+      <!-- Detalles -->
+      <section>
+        <div class="flex items-center gap-3 mb-8 pb-4 border-b-2 border-gray-100">
+          <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+            <mat-icon class="text-purple-600 !text-xl">tune</mat-icon>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900">Detalles del Curso</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+           <div>
+             <label for="categoria" class="block text-sm font-semibold text-gray-900 mb-2">
+               Categoría <span class="text-red-500">*</span>
+             </label>
+             <select
+               id="categoria"
+               formControlName="categoria"
+               class="w-full px-4 py-3.5 text-base border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all bg-white"
+               [class.border-red-300]="showError('categoria')">
+              <option value="">Selecciona una categoría</option>
+              <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
+            </select>
+            <span class="text-sm text-red-600 font-medium block mt-2" *ngIf="showError('categoria')">
+              {{ getFieldError('categoria') }}
+            </span>
+          </div>
+
+           <div>
+             <label for="nivel" class="block text-sm font-semibold text-gray-900 mb-2">
+               Nivel <span class="text-red-500">*</span>
+             </label>
+             <select
+               id="nivel"
+               formControlName="nivel"
+               class="w-full px-4 py-3.5 text-base border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all bg-white"
+               [class.border-red-300]="showError('nivel')">
+              <option value="">Selecciona un nivel</option>
+              <option *ngFor="let nivel of niveles" [value]="nivel">{{ nivel }}</option>
+            </select>
+            <span class="text-sm text-red-600 font-medium block mt-2" *ngIf="showError('nivel')">
+              {{ getFieldError('nivel') }}
+            </span>
+          </div>
+
+           <div class="md:col-span-2">
+             <label for="precio" class="block text-sm font-semibold text-gray-900 mb-2">
+               Precio (COP) <span class="text-red-500">*</span>
+             </label>
+             <div class="relative">
+               <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 font-bold text-lg">$</span>
+               <input
+                 id="precio"
+                 type="number"
+                 formControlName="precio"
+                 placeholder="0"
+                 min="0"
+                 step="1000"
+                 class="w-full pl-10 pr-4 py-3.5 text-base border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all">
+            </div>
+            <span class="text-xs text-gray-500 mt-2 block">Ingresa 0 para curso gratuito</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Imagen Principal -->
+      <section>
+        <div class="flex items-center gap-3 mb-8 pb-4 border-b-2 border-gray-100">
+          <div class="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center">
+            <mat-icon class="text-pink-600 !text-xl">image</mat-icon>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900">Imagen de Portada</h2>
+        </div>
+
+        <input 
+          #fileInput
+          type="file"
+          id="fileInput"
+          accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+          (change)="onFileSelected($event)"
+          class="hidden">
+
+         <div *ngIf="!imagePreview"
+              (click)="triggerFileInput()"
+              (keydown.enter)="triggerFileInput()"
+              tabindex="0"
+              class="border-3 border-dashed border-gray-300 rounded-2xl p-16 text-center cursor-pointer hover:border-indigo-500 hover:bg-indigo-50/50 transition-all group">
+          <div class="w-20 h-20 mx-auto mb-6 bg-indigo-100 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+            <mat-icon class="text-indigo-600 !text-5xl">cloud_upload</mat-icon>
+          </div>
+          <p class="text-lg font-bold text-gray-900 mb-2">Sube la imagen del curso</p>
+          <p class="text-sm text-gray-500">JPG, PNG, WebP o GIF • Máximo 5MB</p>
+        </div>
+
+        <div *ngIf="imagePreview" class="space-y-4">
+          <div class="relative rounded-2xl overflow-hidden shadow-2xl group">
+            <img [src]="imagePreview" alt="Vista previa" class="w-full h-auto max-h-[500px] object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-all flex items-end justify-center pb-8 gap-4">
+              <button 
+                type="button"
+                (click)="removeImage()"
+                class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-lg hover:scale-105 flex items-center gap-2">
+                <mat-icon>delete</mat-icon>
+                <span>Eliminar</span>
+              </button>
+              <button 
+                type="button"
+                (click)="triggerFileInput()"
+                class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-lg hover:scale-105 flex items-center gap-2">
+                <mat-icon>edit</mat-icon>
+                <span>Cambiar</span>
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="selectedFile" class="flex items-center gap-4 p-5 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl">
+            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+              <mat-icon class="text-green-600">check_circle</mat-icon>
+            </div>
+            <div class="flex-1">
+              <p class="font-bold text-gray-900">{{ selectedFile.name }}</p>
+              <p class="text-sm text-gray-600">{{ formatFileSize(selectedFile.size) }}</p>
             </div>
           </div>
         </div>
 
-        <!-- Sección de detalles -->
-        <div class="mb-8">
-          <h3 class="text-lg font-semibold text-gray-900 mb-6 pb-2 border-b border-gray-200">
-            Detalles del Curso
-          </h3>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <!-- Campo: Categoría -->
-            <div>
-              <label for="categoria" class="block text-sm font-medium text-gray-700 mb-2">
-                Categoría*
-              </label>
-              <input 
-                type="text" 
-                id="categoria" 
-                formControlName="categoria"
-                class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
-                placeholder="Ej: Desarrollo Web"
-                [class.border-red-300]="showError('categoria')">
-              <div class="mt-1 text-sm text-red-600" *ngIf="showError('categoria')">
-                <span *ngIf="cursoForm.get('categoria')?.errors?.['required']">La categoría es obligatoria</span>
-              </div>
-            </div>
-
-            <!-- Campo: Nivel -->
-            <div>
-              <label for="nivel" class="block text-sm font-medium text-gray-700 mb-2">
-                Nivel*
-              </label>
-              <select 
-                id="nivel" 
-                formControlName="nivel"
-                class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
-                [class.border-red-300]="showError('nivel')">
-                <option value="" disabled selected>Selecciona un nivel</option>
-                <option value="Básico">Básico</option>
-                <option value="Intermedio">Intermedio</option>
-                <option value="Avanzado">Avanzado</option>
-              </select>
-              <div class="mt-1 text-sm text-red-600" *ngIf="showError('nivel')">
-                <span *ngIf="cursoForm.get('nivel')?.errors?.['required']">Selecciona un nivel</span>
-              </div>
-            </div>
+        <div *ngIf="isUploadingImage()" class="p-8 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl border-2 border-indigo-200">
+          <div class="flex flex-col items-center gap-4">
+            <div class="w-16 h-16 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+            <p class="text-lg font-bold text-gray-900">Subiendo imagen...</p>
           </div>
+        </div>
+      </section>
 
-          <!-- Campo: Precio -->
-          <div>
-            <label for="precio" class="block text-sm font-medium text-gray-700 mb-2">
-              Precio (USD)*
-            </label>
-            <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <span class="text-gray-500 sm:text-sm">$</span>
-              </div>
-              <input 
-                type="number" 
-                id="precio" 
-                formControlName="precio"
-                class="block w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
-                placeholder="0.00"
-                [class.border-red-300]="showError('precio')">
-            </div>
-            <div class="mt-1 text-sm text-red-600" *ngIf="showError('precio')">
-              <span *ngIf="cursoForm.get('precio')?.errors?.['required']">El precio es obligatorio</span>
-              <span *ngIf="cursoForm.get('precio')?.errors?.['min']">No puede ser negativo</span>
-            </div>
+      <!-- Galería (Opcional - visible pero no funcional hasta implementar backend) -->
+      <section>
+        <div class="flex items-center gap-3 mb-8 pb-4 border-b-2 border-gray-100">
+          <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+            <mat-icon class="text-orange-600 !text-xl">photo_library</mat-icon>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900">Galería de Imágenes</h2>
+          <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Próximamente</span>
+        </div>
+
+        <input 
+          #galleryFileInput
+          type="file"
+          id="galleryFileInput"
+          accept="image/*"
+          (change)="onGalleryFileSelected($event)"
+          multiple
+          class="hidden">
+
+        <button 
+          type="button"
+          (click)="triggerGalleryFileInput()"
+          class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-all shadow-md hover:shadow-lg mb-4">
+          <mat-icon class="inline-block mr-2">add_a_photo</mat-icon>
+          Seleccionar Imágenes
+        </button>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" *ngIf="galleryPreviews.length > 0">
+          <div *ngFor="let preview of galleryPreviews; let i = index" class="relative rounded-lg overflow-hidden shadow-lg group">
+            <img [src]="preview" alt="Galería" class="w-full h-32 object-cover">
+            <button 
+              type="button"
+              (click)="removeGalleryImage(i)"
+              class="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all">
+              <mat-icon class="!text-base">close</mat-icon>
+            </button>
           </div>
         </div>
 
-        <!-- Acciones del formulario -->
-        <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t border-gray-200">
+        <div *ngIf="galleryPreviews.length === 0" class="text-center py-8 text-gray-400">
+          <mat-icon class="!text-4xl mb-2">photo_library</mat-icon>
+          <p class="text-sm">Galería vacía</p>
+        </div>
+      </section>
+
+      <!-- Video Preview -->
+      <section>
+        <div class="flex items-center gap-3 mb-8 pb-4 border-b-2 border-gray-100">
+          <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+            <mat-icon class="text-red-600 !text-xl">play_circle</mat-icon>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900">Video de Presentación</h2>
+          <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Próximamente</span>
+        </div>
+
+        <input 
+          #videoPreviewInput
+          type="file"
+          id="videoPreviewInput"
+          accept="video/*"
+          (change)="onVideoPreviewSelected($event)"
+          class="hidden">
+
+        <button 
+          type="button"
+          (click)="triggerVideoPreviewInput()"
+          class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-all shadow-md mb-4">
+          <mat-icon class="inline-block mr-2">video_call</mat-icon>
+          Seleccionar Video
+        </button>
+
+        <div *ngIf="videoPreview" class="relative rounded-xl overflow-hidden shadow-xl">
+          <video [src]="videoPreview" controls class="w-full max-h-96"></video>
           <button 
-            type="button" 
-            class="flex-1 px-6 py-3 border border-gray-300 rounded-lg shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 flex items-center justify-center gap-2"
-            (click)="router.navigate(['/cursos'])">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-            Cancelar
-          </button>
-          <button 
-            type="submit" 
-            [disabled]="isSubmitting || cursoForm.invalid"
-            class="flex-1 px-6 py-3 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2">
-            <span *ngIf="isSubmitting" class="flex items-center">
-              <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Guardando...
-            </span>
-            <span *ngIf="!isSubmitting && !isEditMode" class="flex items-center">
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-              </svg>
-              Crear Curso
-            </span>
-            <span *ngIf="!isSubmitting && isEditMode" class="flex items-center">
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-              </svg>
-              Actualizar Curso
-            </span>
+            type="button"
+            (click)="removeVideoPreview()"
+            class="absolute top-4 right-4 bg-red-600 hover:bg-red-700 text-white p-3 rounded-full">
+            <mat-icon>delete</mat-icon>
           </button>
         </div>
 
-        <!-- Mensaje de error general -->
-        <div *ngIf="error" class="mt-6 rounded-lg bg-red-50 border border-red-200 p-4">
-          <div class="flex">
-            <div class="flex-shrink-0">
-              <svg class="h-5 w-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-            </div>
-            <div class="ml-3">
-              <h3 class="text-sm font-medium text-red-800">
-                {{ error }}
-              </h3>
-            </div>
-          </div>
+        <div *ngIf="!videoPreview" class="text-center py-8 text-gray-400">
+          <mat-icon class="!text-4xl mb-2">play_circle_outline</mat-icon>
+          <p class="text-sm">Sin video</p>
         </div>
-      </form>
-    </div>
+      </section>
+
+      <!-- Error -->
+      <div *ngIf="error()" class="flex items-start gap-4 p-5 bg-red-50 border-l-4 border-red-500 rounded-xl">
+        <mat-icon class="text-red-600">error</mat-icon>
+        <div class="flex-1">
+          <h3 class="font-bold text-red-900 mb-1">Error</h3>
+          <p class="text-red-700 text-sm">{{ error() }}</p>
+        </div>
+        <button type="button" (click)="error.set(null)" class="text-red-600 hover:bg-red-100 p-2 rounded-lg">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <!-- Botones -->
+      <div class="flex flex-col sm:flex-row gap-4 pt-8 border-t-2 border-gray-100">
+        <button 
+          type="button"
+          (click)="onCancel()"
+          [disabled]="isSubmitting()"
+          class="px-8 py-4 border-2 border-gray-300 text-gray-700 font-bold rounded-xl hover:bg-gray-50 transition-all disabled:opacity-50 flex items-center justify-center gap-2">
+          <mat-icon>close</mat-icon>
+          <span>Cancelar</span>
+        </button>
+        
+        <button 
+          type="submit"
+          [disabled]="isSubmitting() || cursoForm.invalid"
+          class="flex-1 px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold rounded-xl transition-all disabled:opacity-50 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl">
+          <div *ngIf="isSubmitting()" class="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
+          <mat-icon *ngIf="!isSubmitting()">rocket_launch</mat-icon>
+          <span class="text-lg">{{ isSubmitting() ? 'Guardando...' : 'Publicar Curso' }}</span>
+        </button>
+      </div>
+    </form>
   </div>
 </div>

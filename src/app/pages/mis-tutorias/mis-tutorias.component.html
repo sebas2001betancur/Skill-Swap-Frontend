@@ -1,0 +1,258 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Header -->
+    <div class="mb-12 text-center">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-green-500 to-teal-600 rounded-full mb-6 shadow-lg">
+        <mat-icon class="text-white text-2xl">workspace_premium</mat-icon>
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 via-green-800 to-teal-800 bg-clip-text text-transparent mb-4">
+        Mis Tutorías
+      </h1>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed mb-8">
+        Gestiona tus sesiones de tutoría como mentor y ayuda a otros estudiantes a alcanzar sus metas
+      </p>
+      <button mat-raised-button color="primary" class="px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-shadow bg-gradient-to-r from-green-500 to-teal-600"
+              (click)="crearNuevaTutoria()">
+        <mat-icon class="mr-2">add</mat-icon>
+        Crear Nueva Tutoría
+      </button>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="flex justify-center py-12">
+      <mat-spinner diameter="50"></mat-spinner>
+    </div>
+
+    <!-- Content -->
+    <div *ngIf="!isLoading">
+      <mat-tab-group [(selectedIndex)]="selectedTab" class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 overflow-hidden">
+
+        <!-- Tutorías Próximas -->
+        <mat-tab label="Próximas ({{ tutoriasProximas.length }})">
+          <div class="p-8">
+
+            <!-- Lista de tutorías -->
+            <div *ngIf="tutoriasProximas.length > 0" class="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+
+              <mat-card *ngFor="let tutoria of tutoriasProximas; trackBy: trackByTutoriaId"
+                        class="group bg-white/90 backdrop-blur-sm border border-white/20 rounded-2xl shadow-lg hover:shadow-2xl hover:shadow-green-500/10 transition-all duration-300 transform hover:-translate-y-1">
+
+                <!-- Estado badge -->
+                <div class="absolute top-4 right-4 z-10">
+                  <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg">
+                    <mat-icon class="text-xs mr-1">{{ getEstadoIcon(tutoria.estado) }}</mat-icon>
+                    {{ tutoria.estado }}
+                  </span>
+                </div>
+
+                <mat-card-header class="pb-3">
+                  <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-600 rounded-xl flex items-center justify-center mb-3 shadow-lg">
+                    <mat-icon class="text-white text-lg">{{ getModalidadIcon(tutoria.modalidad) }}</mat-icon>
+                  </div>
+                  <mat-card-title class="text-xl font-bold text-gray-900 group-hover:text-green-600 transition-colors line-clamp-1">
+                    {{ tutoria.titulo }}
+                  </mat-card-title>
+                  <mat-card-subtitle class="flex items-center gap-2 mt-2 text-sm text-gray-600">
+                    <span class="inline-flex items-center px-2 py-1 rounded-md bg-green-50 text-green-700 font-medium">
+                      <mat-icon class="text-xs mr-1">{{ getModalidadIcon(tutoria.modalidad) }}</mat-icon>
+                      {{ tutoria.modalidad }}
+                    </span>
+                    <span class="inline-flex items-center px-2 py-1 rounded-md bg-teal-50 text-teal-700 font-medium">
+                      <mat-icon class="text-xs mr-1">trending_up</mat-icon>
+                      {{ tutoria.nivelRequerido }}
+                    </span>
+                  </mat-card-subtitle>
+                </mat-card-header>
+
+                <mat-card-content class="pt-0">
+                  <p class="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">{{ tutoria.descripcion }}</p>
+
+                  <div class="space-y-3">
+                    <div class="flex items-center gap-3 p-2 rounded-lg bg-gray-50 group-hover:bg-green-50 transition-colors">
+                      <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                        <mat-icon class="text-green-600 text-sm">event</mat-icon>
+                      </div>
+                      <div class="flex-1">
+                        <p class="text-xs text-gray-500 font-medium">Fecha y hora</p>
+                        <p class="text-sm text-gray-900 font-medium">{{ formatearFecha(tutoria.fechaHora) }}</p>
+                      </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 p-2 rounded-lg bg-gray-50 group-hover:bg-blue-50 transition-colors">
+                      <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <mat-icon class="text-blue-600 text-sm">school</mat-icon>
+                      </div>
+                      <div class="flex-1">
+                        <p class="text-xs text-gray-500 font-medium">Materia</p>
+                        <p class="text-sm text-gray-900 font-medium">{{ tutoria.materia }}</p>
+                      </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 p-2 rounded-lg bg-gray-50 group-hover:bg-orange-50 transition-colors">
+                      <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+                        <mat-icon class="text-orange-600 text-sm">group</mat-icon>
+                      </div>
+                      <div class="flex-1">
+                        <p class="text-xs text-gray-500 font-medium">Cupos disponibles</p>
+                        <p class="text-sm text-gray-900 font-medium">{{ tutoria.cuposDisponibles }}/{{ tutoria.cupoMaximo }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </mat-card-content>
+
+                <mat-card-actions class="pt-4 px-6 pb-6 flex flex-wrap gap-2">
+                   <button mat-stroked-button color="primary" class="flex-1 rounded-lg hover:bg-blue-50 transition-colors"
+                           (click)="verDetalles(tutoria.id)">
+                     <mat-icon class="mr-1">visibility</mat-icon>
+                     Ver Detalles
+                   </button>
+                    <button *ngIf="isCurrentUserMentor(tutoria)" mat-stroked-button color="accent" class="flex-1 rounded-lg hover:bg-purple-50 transition-colors relative"
+                            (click)="verSolicitudes(tutoria.id)">
+                      <mat-icon class="mr-1">people</mat-icon>
+                      Solicitudes
+                      <span *ngIf="solicitudesPendientesCount[tutoria.id] > 0"
+                            class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                        {{ solicitudesPendientesCount[tutoria.id] }}
+                      </span>
+                    </button>
+                   <button *ngIf="isCurrentUserMentor(tutoria) && puedeCancelarTutoria(tutoria)" mat-stroked-button color="warn" class="flex-1 rounded-lg hover:bg-red-50 transition-colors"
+                           (click)="cancelarTutoria(tutoria.id)">
+                     <mat-icon class="mr-1">cancel</mat-icon>
+                     Cancelar
+                   </button>
+                   <button *ngIf="isCurrentUserMentor(tutoria) && !puedeCancelarTutoria(tutoria)" mat-stroked-button disabled class="flex-1 rounded-lg opacity-50 cursor-not-allowed"
+                           [matTooltip]="getTooltipCancelacion(tutoria)">
+                     <mat-icon class="mr-1">block</mat-icon>
+                     No se puede cancelar
+                   </button>
+                </mat-card-actions>
+
+              </mat-card>
+
+            </div>
+
+            <!-- Sin tutorías -->
+            <div *ngIf="tutoriasProximas.length === 0" class="text-center py-20">
+              <div class="w-24 h-24 bg-gradient-to-r from-green-200 to-teal-300 rounded-full flex items-center justify-center mx-auto mb-6">
+                <mat-icon class="text-green-600 text-4xl">event_note</mat-icon>
+              </div>
+              <h3 class="text-2xl font-bold text-gray-900 mb-3">No tienes tutorías próximas</h3>
+              <p class="text-gray-600 mb-8 max-w-md mx-auto">Crea una nueva tutoría para comenzar a ayudar a otros estudiantes y compartir tus conocimientos.</p>
+              <button mat-raised-button color="primary" class="px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-shadow bg-gradient-to-r from-green-500 to-teal-600"
+                      (click)="crearNuevaTutoria()">
+                <mat-icon class="mr-2">add</mat-icon>
+                Crear Tutoría
+              </button>
+            </div>
+
+          </div>
+        </mat-tab>
+
+        <!-- Tutorías Pasadas -->
+        <mat-tab label="Pasadas ({{ tutoriasPasadas.length }})">
+          <div class="p-8">
+
+            <!-- Lista de tutorías -->
+            <div *ngIf="tutoriasPasadas.length > 0" class="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+
+              <mat-card *ngFor="let tutoria of tutoriasPasadas; trackBy: trackByTutoriaId"
+                        class="group bg-white/90 backdrop-blur-sm border border-white/20 rounded-2xl shadow-lg hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 transform hover:-translate-y-1">
+
+                <!-- Estado badge -->
+                <div class="absolute top-4 right-4 z-10">
+                  <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg">
+                    <mat-icon class="text-xs mr-1">{{ getEstadoIcon(tutoria.estado) }}</mat-icon>
+                    {{ tutoria.estado }}
+                  </span>
+                </div>
+
+                <mat-card-header class="pb-3">
+                  <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mb-3 shadow-lg">
+                    <mat-icon class="text-white text-lg">{{ getModalidadIcon(tutoria.modalidad) }}</mat-icon>
+                  </div>
+                  <mat-card-title class="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-1">
+                    {{ tutoria.titulo }}
+                  </mat-card-title>
+                  <mat-card-subtitle class="flex items-center gap-2 mt-2 text-sm text-gray-600">
+                    <span class="inline-flex items-center px-2 py-1 rounded-md bg-blue-50 text-blue-700 font-medium">
+                      <mat-icon class="text-xs mr-1">{{ getModalidadIcon(tutoria.modalidad) }}</mat-icon>
+                      {{ tutoria.modalidad }}
+                    </span>
+                    <span class="inline-flex items-center px-2 py-1 rounded-md bg-indigo-50 text-indigo-700 font-medium">
+                      <mat-icon class="text-xs mr-1">trending_up</mat-icon>
+                      {{ tutoria.nivelRequerido }}
+                    </span>
+                  </mat-card-subtitle>
+                </mat-card-header>
+
+                <mat-card-content class="pt-0">
+                  <p class="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">{{ tutoria.descripcion }}</p>
+
+                  <div class="space-y-3">
+                    <div class="flex items-center gap-3 p-2 rounded-lg bg-gray-50 group-hover:bg-blue-50 transition-colors">
+                      <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <mat-icon class="text-blue-600 text-sm">event</mat-icon>
+                      </div>
+                      <div class="flex-1">
+                        <p class="text-xs text-gray-500 font-medium">Fecha y hora</p>
+                        <p class="text-sm text-gray-900 font-medium">{{ formatearFecha(tutoria.fechaHora) }}</p>
+                      </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 p-2 rounded-lg bg-gray-50 group-hover:bg-green-50 transition-colors">
+                      <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                        <mat-icon class="text-green-600 text-sm">school</mat-icon>
+                      </div>
+                      <div class="flex-1">
+                        <p class="text-xs text-gray-500 font-medium">Materia</p>
+                        <p class="text-sm text-gray-900 font-medium">{{ tutoria.materia }}</p>
+                      </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 p-2 rounded-lg bg-gray-50 group-hover:bg-orange-50 transition-colors">
+                      <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+                        <mat-icon class="text-orange-600 text-sm">group</mat-icon>
+                      </div>
+                      <div class="flex-1">
+                        <p class="text-xs text-gray-500 font-medium">Cupos disponibles</p>
+                        <p class="text-sm text-gray-900 font-medium">{{ tutoria.cuposDisponibles }}/{{ tutoria.cupoMaximo }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </mat-card-content>
+
+                <mat-card-actions class="pt-4 px-6 pb-6 flex gap-3">
+                  <button mat-stroked-button color="primary" class="flex-1 rounded-lg hover:bg-blue-50 transition-colors"
+                          (click)="verDetalles(tutoria.id)">
+                    <mat-icon class="mr-1">visibility</mat-icon>
+                    Ver Detalles
+                  </button>
+                  <button mat-stroked-button color="accent" class="flex-1 rounded-lg hover:bg-purple-50 transition-colors"
+                          (click)="verCalificaciones(tutoria)">
+                    <mat-icon class="mr-1">star</mat-icon>
+                    Calificaciones
+                  </button>
+                </mat-card-actions>
+
+              </mat-card>
+
+            </div>
+
+            <!-- Sin tutorías -->
+            <div *ngIf="tutoriasPasadas.length === 0" class="text-center py-20">
+              <div class="w-24 h-24 bg-gradient-to-r from-blue-200 to-indigo-300 rounded-full flex items-center justify-center mx-auto mb-6">
+                <mat-icon class="text-blue-600 text-4xl">history</mat-icon>
+              </div>
+              <h3 class="text-2xl font-bold text-gray-900 mb-3">No tienes tutorías pasadas</h3>
+              <p class="text-gray-600 max-w-md mx-auto">Aquí aparecerán tus tutorías completadas una vez que hayan finalizado.</p>
+            </div>
+
+          </div>
+        </mat-tab>
+
+      </mat-tab-group>
+    </div>
+
+  </div>
+</div>

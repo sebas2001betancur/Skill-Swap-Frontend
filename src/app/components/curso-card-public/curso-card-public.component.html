@@ -1,0 +1,23 @@
+<!-- Hacemos que toda la tarjeta sea un enlace navegable usando routerLink -->
+<a [routerLink]="['/cursos/preview', curso.id]" class="curso-card-link">
+  <div class="curso-card-public">
+    <div class="curso-image-placeholder">
+      <!-- Podrías añadir una imagen real del curso aquí -->
+      <img [src]="curso.imageUrl" alt="{{ curso.nombre }}">
+      <div class="overlay">
+        <i class="fas fa-search-plus"></i>
+      </div>
+    </div>
+    <div class="curso-info">
+      <h3 class="curso-title">{{ curso.nombre }}</h3>
+      <p class="curso-creator">Por: {{ curso.creadorId }}</p> <!-- Necesitaremos este dato -->
+      <div class="curso-footer">
+        <span class="curso-price">{{ curso.precio > 0 ? (curso.precio | currency:'USD') : 'Gratis' }}</span>
+        <!-- Podríamos añadir una calificación con estrellas aquí -->
+        <span class="curso-rating">
+          <i class="fas fa-star"></i> 4.8 (123)
+        </span>
+      </div>
+    </div>
+  </div>
+</a>

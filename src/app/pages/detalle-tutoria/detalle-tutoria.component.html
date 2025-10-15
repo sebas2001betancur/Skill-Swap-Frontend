@@ -1,0 +1,447 @@
+<div class="detalle-tutoria-container">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="flex justify-center py-12">
+      <mat-spinner diameter="50"></mat-spinner>
+    </div>
+
+    <!-- Contenido -->
+    <div *ngIf="!isLoading && tutoria" class="space-y-6">
+
+      <!-- Header -->
+      <div class="bg-white rounded-lg shadow-sm border p-6">
+        <div class="flex items-start justify-between mb-4">
+           <div class="flex-1">
+             <h1 class="text-2xl font-bold text-gray-900 mb-2">{{ tutoria.titulo }}</h1>
+             <div class="flex items-center gap-4 text-sm text-gray-600">
+               <div class="flex items-center gap-1">
+                 <mat-icon class="text-sm">{{ getModalidadIcon(tutoria.modalidad) }}</mat-icon>
+                 <span>{{ tutoria.modalidad }}</span>
+               </div>
+               <span>•</span>
+               <span>{{ tutoria.materia }}</span>
+               <span>•</span>
+               <span class="capitalize">{{ tutoria.nivelRequerido }}</span>
+             </div>
+           </div>
+           <div class="flex flex-col gap-2">
+             <span class="px-3 py-1 rounded-full text-sm font-medium {{ getEstadoColor(tutoria.estado) }}">
+               {{ tutoria.estado }}
+             </span>
+             <!-- Cupos llenos badge -->
+             <span *ngIf="tutoria.cuposDisponibles === 0"
+                   class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 border border-red-200">
+               <mat-icon class="text-sm mr-1">group</mat-icon>
+               Cupos llenos
+             </span>
+           </div>
+        </div>
+
+        <!-- Información del mentor -->
+        <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
+          <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center">
+            <mat-icon class="text-indigo-600">person</mat-icon>
+          </div>
+          <div>
+            <p class="font-medium text-gray-900">{{ tutoria.mentorNombre || 'Mentor' }}</p>
+            <p class="text-sm text-gray-600">Mentor especializado</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detalles de la tutoría -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Información principal -->
+        <div class="lg:col-span-2 space-y-6">
+
+          <!-- Descripción -->
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Descripción</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <p class="text-gray-700 whitespace-pre-line">{{ tutoria.descripcion }}</p>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Temas específicos -->
+          <mat-card *ngIf="tutoria.temasEspecificos && tutoria.temasEspecificos.length > 0">
+            <mat-card-header>
+              <mat-card-title>Temas específicos</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <mat-chip-set>
+                <mat-chip *ngFor="let tema of tutoria.temasEspecificos" class="mr-2 mb-2">
+                  {{ tema }}
+                </mat-chip>
+              </mat-chip-set>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Ubicación y enlace -->
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Detalles de la sesión</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="space-y-3">
+              <div class="flex items-center gap-3">
+                <mat-icon class="text-gray-400">event</mat-icon>
+                <div>
+                  <p class="font-medium">{{ formatFecha(tutoria.fechaHora) }}</p>
+                  <p class="text-sm text-gray-600">Duración: {{ tutoria.duracionMinutos }} minutos</p>
+                </div>
+              </div>
+
+              <div *ngIf="tutoria.ubicacionPresencial" class="flex items-center gap-3">
+                <mat-icon class="text-gray-400">location_on</mat-icon>
+                <div>
+                  <p class="font-medium">Presencial</p>
+                  <p class="text-sm text-gray-600">{{ tutoria.ubicacionPresencial }}</p>
+                </div>
+              </div>
+
+              <div *ngIf="tutoria.enlaceVirtual" class="flex items-center gap-3">
+                <mat-icon class="text-gray-400">videocam</mat-icon>
+                <div>
+                  <p class="font-medium">Enlace virtual</p>
+                  <a [href]="tutoria.enlaceVirtual" target="_blank"
+                     class="text-indigo-600 hover:text-indigo-800 text-sm underline">
+                    {{ tutoria.enlaceVirtual }}
+                  </a>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-3">
+                <mat-icon class="text-gray-400">group</mat-icon>
+                <div>
+                  <p class="font-medium">Cupos disponibles</p>
+                  <p class="text-sm text-gray-600">{{ tutoria.cupoMaximo }} de {{ tutoria.cupoMaximo }}</p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+        </div>
+
+        <!-- Panel lateral -->
+        <div class="space-y-6">
+
+          <!-- Acciones -->
+          <mat-card class="bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 border-0 shadow-xl backdrop-blur-sm">
+            <mat-card-content class="p-8">
+              <div class="space-y-6">
+
+                  <!-- Solicitar participación -->
+                  <div *ngIf="puedeSolicitar()" class="relative group">
+                    <button
+                          class="w-full relative overflow-hidden bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 text-white font-bold py-4 px-6 rounded-2xl shadow-lg hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-300 ease-out disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:hover:scale-100"
+                          (click)="abrirModalSolicitud()" [disabled]="isRequesting">
+                      <!-- Efecto de brillo animado -->
+                      <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
+
+                      <!-- Contenido del botón -->
+                      <div class="relative flex items-center justify-center gap-3">
+                        <mat-icon class="text-xl animate-pulse group-hover:animate-bounce">person_add</mat-icon>
+                        <span class="text-lg tracking-wide">{{ isRequesting ? 'Enviando solicitud...' : 'Solicitar participación' }}</span>
+                        <mat-icon *ngIf="!isRequesting" class="text-xl group-hover:translate-x-1 transition-transform duration-300">arrow_forward</mat-icon>
+                        <mat-spinner *ngIf="isRequesting" diameter="20" class="text-white"></mat-spinner>
+                      </div>
+                    </button>
+
+                    <!-- Tooltip informativo -->
+                    <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-sm px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap shadow-lg">
+                      Haz clic para solicitar participar en esta tutoría
+                      <div class="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
+                    </div>
+                  </div>
+
+                 <!-- Mensaje cuando no puede solicitar -->
+                 <div *ngIf="!puedeSolicitar() && !isCurrentUserMentor" class="relative">
+                   <!-- Icono de advertencia animado -->
+                   <div class="flex items-center justify-center mb-4">
+                     <div class="relative">
+                       <div class="w-16 h-16 bg-gradient-to-br from-red-400 to-pink-500 rounded-full flex items-center justify-center shadow-lg animate-pulse">
+                         <mat-icon class="text-white text-2xl">warning</mat-icon>
+                       </div>
+                       <div class="absolute -top-1 -right-1 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center animate-bounce">
+                         <span class="text-xs font-bold text-gray-800">!</span>
+                       </div>
+                     </div>
+                   </div>
+
+                   <!-- Mensaje principal -->
+                   <div class="bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-2xl p-6 shadow-inner">
+                     <h3 class="text-lg font-bold text-red-800 mb-3 text-center">No se puede solicitar participación</h3>
+
+                     <div class="space-y-3">
+                       <p *ngIf="tutoria.estado?.toLowerCase() !== 'disponible'"
+                          class="flex items-center gap-3 p-3 bg-white/70 rounded-xl border border-red-200">
+                         <mat-icon class="text-red-500 flex-shrink-0">cancel</mat-icon>
+                         <span class="text-red-700 font-medium">Esta tutoría ya no está disponible</span>
+                         <span class="text-xs text-red-500 bg-red-100 px-2 py-1 rounded-full ml-auto">Estado: {{ tutoria.estado }}</span>
+                       </p>
+
+                       <p *ngIf="tutoria.estado?.toLowerCase() === 'disponible' && tutoria.cuposDisponibles === 0"
+                          class="flex items-center gap-3 p-3 bg-white/70 rounded-xl border border-orange-200">
+                         <mat-icon class="text-orange-500 flex-shrink-0">group</mat-icon>
+                         <span class="text-orange-700 font-medium">No hay cupos disponibles</span>
+                         <span class="text-xs text-orange-500 bg-orange-100 px-2 py-1 rounded-full ml-auto">{{ tutoria.cuposDisponibles }}/{{ tutoria.cupoMaximo }}</span>
+                       </p>
+
+                       <p *ngIf="tutoria.estado?.toLowerCase() === 'disponible' && tutoria.cuposDisponibles > 0 && tutoriaHaPasado()"
+                          class="flex items-center gap-3 p-3 bg-white/70 rounded-xl border border-blue-200">
+                         <mat-icon class="text-blue-500 flex-shrink-0">schedule</mat-icon>
+                         <span class="text-blue-700 font-medium">Esta tutoría ya pasó</span>
+                         <span class="text-xs text-blue-500 bg-blue-100 px-2 py-1 rounded-full ml-auto">{{ formatFecha(tutoria.fechaHora) }}</span>
+                       </p>
+
+                       <p *ngIf="tutoria.estado?.toLowerCase() === 'disponible' && tutoria.cuposDisponibles > 0 && !tutoriaHaPasado() && !authService.isLoggedIn()"
+                          class="flex items-center gap-3 p-3 bg-white/70 rounded-xl border border-purple-200">
+                         <mat-icon class="text-purple-500 flex-shrink-0">login</mat-icon>
+                         <span class="text-purple-700 font-medium">Debes iniciar sesión para solicitar</span>
+                         <button class="text-xs bg-purple-500 text-white px-3 py-1 rounded-full ml-auto hover:bg-purple-600 transition-colors"
+                                 routerLink="/login">
+                           Iniciar sesión
+                         </button>
+                       </p>
+
+                       <p *ngIf="tutoria.estado?.toLowerCase() === 'disponible' && tutoria.cuposDisponibles > 0 && !tutoriaHaPasado() && authService.isLoggedIn() && isCurrentUserMentor"
+                          class="flex items-center gap-3 p-3 bg-white/70 rounded-xl border border-green-200">
+                         <mat-icon class="text-green-500 flex-shrink-0">person</mat-icon>
+                         <span class="text-green-700 font-medium">No puedes solicitar tu propia tutoría</span>
+                         <span class="text-xs text-green-500 bg-green-100 px-2 py-1 rounded-full ml-auto">Eres el mentor</span>
+                       </p>
+                     </div>
+                   </div>
+                 </div>
+
+                 <!-- Acciones del mentor -->
+                 <div *ngIf="isCurrentUserMentor" class="space-y-4">
+                   <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-4">
+                     <div class="flex items-center gap-2 mb-3">
+                       <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                         <mat-icon class="text-white text-sm">admin_panel_settings</mat-icon>
+                       </div>
+                       <span class="text-green-800 font-bold">Panel de Mentor</span>
+                     </div>
+
+                     <div class="space-y-3">
+                       <button class="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold py-3 px-4 rounded-xl shadow-md hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2"
+                               (click)="onEditarTutoria()">
+                         <mat-icon class="text-sm">edit</mat-icon>
+                         <span>Editar tutoría</span>
+                       </button>
+
+                       <button class="w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-semibold py-3 px-4 rounded-xl shadow-md hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2"
+                               (click)="onCancelarTutoria()">
+                         <mat-icon class="text-sm">cancel</mat-icon>
+                         <span>Cancelar tutoría</span>
+                       </button>
+                     </div>
+                   </div>
+                 </div>
+
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+
+
+        </div>
+
+      </div>
+
+     </div>
+
+   </div>
+ </div>
+
+  <!-- Modal de solicitud con diseño moderno -->
+  <div *ngIf="mostrarModalSolicitud"
+       class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
+    <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl transform animate-scaleIn">
+
+      <!-- Header con gradiente -->
+      <div class="relative bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-8 text-white">
+        <!-- Patrón de fondo decorativo -->
+        <div class="absolute inset-0 opacity-10">
+          <div class="absolute top-4 right-4 w-20 h-20 bg-white rounded-full"></div>
+          <div class="absolute bottom-4 left-4 w-16 h-16 bg-white rounded-full"></div>
+          <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full"></div>
+        </div>
+
+        <!-- Botón cerrar -->
+        <button (click)="cerrarModalSolicitud()"
+                class="absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110">
+          <mat-icon class="text-white text-xl">close</mat-icon>
+        </button>
+
+        <!-- Título principal -->
+        <div class="relative flex items-center gap-4">
+          <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+            <mat-icon class="text-3xl animate-bounce">school</mat-icon>
+          </div>
+          <div>
+            <h2 class="text-3xl font-black mb-1">Solicitar Participación</h2>
+            <p class="text-blue-100 text-lg">Únete a esta tutoría y aprende con un experto</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contenido del modal -->
+      <div class="overflow-y-auto max-h-[60vh]">
+
+        <!-- Detalles de la tutoría -->
+        <div class="p-8 bg-gradient-to-br from-gray-50 to-blue-50/30">
+          <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50">
+            <!-- Header de tutoría -->
+            <div class="flex items-start gap-4 mb-6">
+              <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg">
+                 <mat-icon class="text-white text-2xl">{{ getModalidadIcon(tutoria?.modalidad || '') }}</mat-icon>
+              </div>
+              <div class="flex-1">
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ tutoria?.titulo }}</h3>
+                <div class="flex items-center gap-2 text-sm text-gray-600">
+                  <mat-icon class="text-sm">person</mat-icon>
+                  <span class="font-medium">{{ tutoria?.mentorNombre }}</span>
+                  <span class="text-gray-400">•</span>
+                  <mat-icon class="text-sm">school</mat-icon>
+                  <span>{{ tutoria?.materia }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Información detallada -->
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+              <div class="space-y-4">
+                <div class="flex items-center gap-3 p-3 bg-blue-50 rounded-xl">
+                  <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                    <mat-icon class="text-white">event</mat-icon>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-600 font-medium">Fecha y hora</p>
+                    <p class="text-gray-900 font-semibold">{{ tutoria ? formatFecha(tutoria.fechaHora) : '' }}</p>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-3 p-3 bg-purple-50 rounded-xl">
+                  <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
+                    <mat-icon class="text-white">videocam</mat-icon>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-600 font-medium">Modalidad</p>
+                    <p class="text-gray-900 font-semibold">{{ tutoria?.modalidad }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="space-y-4">
+                <div class="flex items-center gap-3 p-3 bg-green-50 rounded-xl">
+                  <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
+                    <mat-icon class="text-white">group</mat-icon>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-600 font-medium">Cupos disponibles</p>
+                    <p class="text-gray-900 font-semibold">{{ tutoria?.cuposDisponibles }}/{{ tutoria?.cupoMaximo }}</p>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-3 p-3 bg-orange-50 rounded-xl">
+                  <div class="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                    <mat-icon class="text-white">trending_up</mat-icon>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-600 font-medium">Nivel</p>
+                    <p class="text-gray-900 font-semibold">{{ tutoria?.nivelRequerido }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Descripción -->
+            <div class="bg-gray-50 rounded-xl p-4">
+              <h4 class="font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                <mat-icon class="text-gray-600">description</mat-icon>
+                Descripción de la tutoría
+              </h4>
+              <p class="text-gray-700 leading-relaxed">{{ tutoria?.descripcion }}</p>
+            </div>
+          </div>
+        </div>
+
+         <!-- Formulario de solicitud -->
+         <div class="p-8 bg-white">
+           <form *ngIf="solicitudForm" [formGroup]="solicitudForm" class="space-y-6">
+
+             <!-- Mensaje al mentor -->
+             <div class="space-y-3">
+               <label for="mensaje" class="block text-lg font-bold text-gray-900 flex items-center gap-2">
+                 <mat-icon class="text-blue-500">message</mat-icon>
+                 Mensaje para el mentor
+                 <span class="text-sm font-normal text-gray-500">(opcional)</span>
+               </label>
+
+               <div class="relative">
+                 <textarea
+                   id="mensaje"
+                   formControlName="mensaje"
+                   rows="5"
+                   class="w-full p-4 border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-300 resize-none bg-gray-50 focus:bg-white"
+                  placeholder="Cuéntale al mentor por qué quieres participar en esta tutoría, qué esperas aprender, o si tienes alguna pregunta específica..."
+                  maxlength="500"></textarea>
+
+                <!-- Contador de caracteres -->
+                <div class="absolute bottom-3 right-3 text-sm text-gray-500 bg-white px-2 py-1 rounded-lg border">
+                  {{ solicitudForm.get('mensaje')?.value?.length || 0 }}/500
+                </div>
+              </div>
+
+              <p class="text-sm text-gray-600 flex items-center gap-2">
+                <mat-icon class="text-sm">info</mat-icon>
+                Un mensaje personalizado aumenta las chances de que tu solicitud sea aceptada
+              </p>
+            </div>
+
+            <!-- Términos y condiciones -->
+            <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
+              <div class="flex items-start gap-3">
+                <mat-icon class="text-blue-500 mt-0.5 flex-shrink-0">info</mat-icon>
+                <div class="text-sm text-blue-800">
+                  <p class="font-medium mb-1">Al enviar esta solicitud aceptas:</p>
+                  <ul class="space-y-1 text-blue-700">
+                    <li>• Asistir puntualmente a la tutoría</li>
+                    <li>• Participar activamente en la sesión</li>
+                    <li>• Respetar las normas del mentor</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="flex gap-4 pt-4">
+              <button type="button"
+                      (click)="cerrarModalSolicitud()"
+                      class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-4 px-6 rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 hover:scale-[1.02]">
+                <mat-icon>close</mat-icon>
+                <span>Cancelar</span>
+              </button>
+
+               <button type="button"
+                       [disabled]="isRequesting || solicitudForm.invalid"
+                       (click)="onSolicitarParticipacion()"
+                      class="flex-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] disabled:transform-none disabled:hover:scale-100 transition-all duration-300 flex items-center justify-center gap-2 relative overflow-hidden">
+                <!-- Efecto de brillo -->
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full hover:translate-x-full transition-transform duration-1000 ease-out"></div>
+
+                <mat-icon *ngIf="!isRequesting" class="relative z-10">send</mat-icon>
+                <mat-spinner *ngIf="isRequesting" diameter="20" class="relative z-10"></mat-spinner>
+                <span class="relative z-10">{{ isRequesting ? 'Enviando solicitud...' : 'Enviar solicitud' }}</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>

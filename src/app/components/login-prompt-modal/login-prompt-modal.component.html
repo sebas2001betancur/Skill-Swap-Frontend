@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>¡Desbloquea el Acceso Completo!</h2>
+<mat-dialog-content>
+  <p>Crea una cuenta o inicia sesión para ver los detalles completos del curso, acceder a los intercambios y mucho más.</p>
+  <ul class="benefits-list">
+    <li><mat-icon>check_circle</mat-icon> Ver currículum detallado</li>
+    <li><mat-icon>check_circle</mat-icon> Intercambios ilimitados</li>
+    <li><mat-icon>check_circle</mat-icon> Acceso a la comunidad</li>
+  </ul>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="false">Cancelar</button>
+  <button mat-stroked-button color="primary" routerLink="/login" [mat-dialog-close]="true">Iniciar Sesión</button>
+  <button mat-flat-button color="primary" routerLink="/register" [mat-dialog-close]="true">Crear Cuenta</button>
+</mat-dialog-actions>

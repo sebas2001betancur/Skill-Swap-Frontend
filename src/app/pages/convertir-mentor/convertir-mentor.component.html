@@ -1,0 +1,175 @@
+<!-- src/app/pages/convertir-mentor/convertir-mentor.component.html -->
+<div class="convertir-mentor-container">
+  <div class="hero-section">
+    <div class="hero-content">
+      <h1>Conviértete en Mentor</h1>
+      <p class="subtitle">Comparte tu conocimiento y ayuda a otros estudiantes a alcanzar sus metas</p>
+    </div>
+  </div>
+
+  <div class="form-container">
+    <!-- Alertas -->
+    <div *ngIf="successMessage" class="alert alert-success">
+      <i class="fas fa-check-circle"></i>
+      {{ successMessage }}
+    </div>
+
+    <div *ngIf="error" class="alert alert-error">
+      <i class="fas fa-exclamation-circle"></i>
+      {{ error }}
+    </div>
+
+    <!-- Formulario -->
+    <form [formGroup]="mentorForm" (ngSubmit)="onSubmit()" class="mentor-form">
+      
+      <!-- Sección: Biografía -->
+      <div class="form-section">
+        <h2>
+          <i class="fas fa-user-circle"></i>
+          Sobre Ti
+        </h2>
+        
+        <div class="form-group">
+          <label for="biografia">
+            Biografía (Opcional)
+            <span class="hint">Cuéntanos sobre tu experiencia y por qué quieres ser mentor</span>
+          </label>
+          <textarea
+            id="biografia"
+            formControlName="biografia"
+            rows="5"
+            placeholder="Ej: Soy estudiante de 7mo semestre apasionado por la programación. He trabajado en varios proyectos y me encanta ayudar a otros a aprender..."
+            [class.invalid]="f['biografia'].invalid && f['biografia'].touched"
+          ></textarea>
+          <div class="char-counter">
+            {{ f['biografia'].value?.length || 0 }} / 500 caracteres
+          </div>
+          <div *ngIf="f['biografia'].invalid && f['biografia'].touched" class="error-message">
+            {{ getErrorMessage('biografia') }}
+          </div>
+        </div>
+         </div>
+
+        <!-- Semestre -->
+        <div class="form-group">
+          <label for="semestre">
+            Semestre Actual (Opcional)
+            <span class="hint">¿En qué semestre estás actualmente?</span>
+          </label>
+          <input
+            type="number"
+            id="semestre"
+            formControlName="semestre"
+            placeholder="Ej: 7"
+            min="1"
+            max="10"
+            [class.invalid]="f['semestre'].invalid && f['semestre'].touched"
+          />
+          <div *ngIf="f['semestre'].invalid && f['semestre'].touched" class="error-message">
+            {{ getErrorMessage('semestre') }}
+          </div>
+        </div>
+
+      <!-- Sección: Materias -->
+      <div class="form-section">
+        <h2>
+          <i class="fas fa-book"></i>
+          Materias que Dominas
+          <span class="required">*</span>
+        </h2>
+        <p class="section-description">
+          Selecciona las materias en las que te sientes cómodo dando tutorías (máximo 5)
+        </p>
+
+         <div class="materias-grid">
+           <div
+             *ngFor="let materia of materiasDisponibles"
+             class="materia-card"
+             [class.selected]="isMateriaSelected(materia)"
+             (click)="toggleMateria(materia)"
+             (keydown.enter)="toggleMateria(materia)"
+             tabindex="0"
+           >
+            <div class="materia-icon">
+              <i class="fas fa-laptop-code" *ngIf="materia.includes('Programación') || materia.includes('Desarrollo')"></i>
+              <i class="fas fa-database" *ngIf="materia.includes('Datos') || materia.includes('Bases')"></i>
+              <i class="fas fa-network-wired" *ngIf="materia.includes('Redes') || materia.includes('Sistemas')"></i>
+              <i class="fas fa-brain" *ngIf="materia.includes('Inteligencia') || materia.includes('Algoritmos')"></i>
+              <i class="fas fa-calculator" *ngIf="materia.includes('Matemáticas') || materia.includes('Cálculo')"></i>
+              <i class="fas fa-project-diagram" *ngIf="!materia.includes('Programación') && !materia.includes('Datos') && !materia.includes('Redes') && !materia.includes('Inteligencia') && !materia.includes('Matemáticas')"></i>
+            </div>
+            <div class="materia-name">{{ materia }}</div>
+            <div class="materia-check" *ngIf="isMateriaSelected(materia)">
+              <i class="fas fa-check-circle"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="selection-info">
+          <span class="selected-count">
+            {{ materiasSeleccionadas.length }} / 5 materias seleccionadas
+          </span>
+        </div>
+
+        <div *ngIf="f['materiasQueDomina'].invalid && f['materiasQueDomina'].touched" class="error-message">
+          Debes seleccionar al menos una materia
+        </div>
+      </div>
+
+      <!-- Beneficios de ser mentor -->
+      <div class="benefits-section">
+        <h3>
+          <i class="fas fa-star"></i>
+          Beneficios de ser Mentor
+        </h3>
+        <div class="benefits-grid">
+          <div class="benefit-item">
+            <i class="fas fa-graduation-cap"></i>
+            <p>Refuerza tus conocimientos enseñando</p>
+          </div>
+          <div class="benefit-item">
+            <i class="fas fa-users"></i>
+            <p>Construye tu red de contactos</p>
+          </div>
+          <div class="benefit-item">
+            <i class="fas fa-trophy"></i>
+            <p>Gana reconocimiento en la comunidad</p>
+          </div>
+          <div class="benefit-item">
+            <i class="fas fa-chart-line"></i>
+            <p>Mejora tus habilidades de comunicación</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="form-actions">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          [disabled]="isSubmitting"
+          routerLink="/dashboard"
+        >
+          <i class="fas fa-times"></i>
+          Cancelar
+        </button>
+        
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="isSubmitting || mentorForm.invalid"
+          [class.loading]="isSubmitting"
+        >
+          <span *ngIf="!isSubmitting">
+            <i class="fas fa-check"></i>
+            Activar Perfil de Mentor
+          </span>
+          <span *ngIf="isSubmitting">
+            <i class="fas fa-spinner fa-spin"></i>
+            Activando...
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

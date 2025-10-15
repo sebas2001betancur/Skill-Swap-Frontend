@@ -1,0 +1,96 @@
+<!-- curso-card-private.component.html -->
+<div class="curso-card" [class.owner-card]="isOwner">
+  
+  <!-- Badge de propietario -->
+  <div class="owner-badge" *ngIf="isOwner">
+    <i class="fas fa-crown"></i>
+    Tu curso
+  </div>
+
+  <!-- Imagen del curso -->
+  <div class="curso-image">
+    <img 
+      [src]="'https://via.placeholder.com/300x200?text=' + curso.nombre" 
+      [alt]="curso.nombre"
+      loading="lazy">
+    <div class="curso-overlay">
+      <span class="categoria-badge">{{ curso.categoria }}</span>
+      <span class="nivel-badge" [attr.data-nivel]="curso.nivel.toLowerCase()">
+        {{ curso.nivel }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Contenido del curso -->
+  <div class="curso-content">
+    <h3 class="curso-title">{{ curso.nombre }}</h3>
+    
+    <p class="curso-description">
+      {{ truncateText(curso.descripcion, 120) }}
+    </p>
+
+    <div class="curso-meta">
+      <div class="creador-info">
+        <i class="fas fa-user-circle"></i>
+        <span>{{ curso.creadorNombre }}</span>
+      </div>
+      <div class="precio-info">
+        <span class="precio" *ngIf="curso.precio > 0">
+          ${{ curso.precio | number:'1.2-2' }}
+        </span>
+        <span class="precio-gratis" *ngIf="curso.precio === 0">
+          Gratis
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Acciones del curso -->
+  <div class="curso-actions">
+    
+    <!-- Botones para propietario -->
+    <ng-container *ngIf="isOwner">
+      <button 
+        class="btn btn-secondary btn-sm"
+        (click)="onEdit()"
+        title="Editar curso">
+        <i class="fas fa-edit"></i>
+        Editar
+      </button>
+      <button 
+        class="btn btn-danger btn-sm"
+        (click)="onDelete()"
+        title="Eliminar curso">
+        <i class="fas fa-trash"></i>
+        Eliminar
+      </button>
+      <button 
+        class="btn btn-primary btn-sm btn-view"
+        [routerLink]="['/curso', curso.id]"
+        title="Ver detalles">
+        <i class="fas fa-eye"></i>
+        Ver
+      </button>
+    </ng-container>
+
+    <!-- Botones para no propietario -->
+    <ng-container *ngIf="!isOwner">
+      <button 
+        class="btn btn-exchange btn-sm"
+        (click)="onExchange()"
+        title="Proponer intercambio">
+        <i class="fas fa-exchange-alt"></i>
+        Intercambiar
+      </button>
+      <button 
+        class="btn btn-primary btn-sm btn-view"
+        [routerLink]="['/curso', curso.id]"
+        title="Ver detalles">
+        <i class="fas fa-eye"></i>
+        Ver Detalles
+      </button>
+    </ng-container>
+
+  </div>
+
+</div>

@@ -1,0 +1,74 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
+  <div class="max-w-4xl mx-auto">
+    <div class="bg-white rounded-2xl shadow-xl p-8">
+
+      <!-- Header -->
+      <header class="mb-8">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Calificaciones de Tutoría</h1>
+            <p class="text-gray-600">Ve las calificaciones de tus estudiantes</p>
+          </div>
+          <button mat-raised-button color="primary" (click)="volver()">
+            <mat-icon class="mr-2">arrow_back</mat-icon>
+            Volver
+          </button>
+        </div>
+      </header>
+
+      <!-- Loading -->
+      <div *ngIf="isLoading" class="flex justify-center items-center py-12">
+        <mat-spinner diameter="50"></mat-spinner>
+        <span class="ml-4 text-gray-600">Cargando calificaciones...</span>
+      </div>
+
+      <!-- Content -->
+      <div *ngIf="!isLoading">
+        <div *ngIf="calificaciones.length === 0" class="text-center py-12">
+          <mat-icon class="text-6xl text-gray-300 mb-4">star_border</mat-icon>
+          <h3 class="text-xl font-semibold text-gray-600 mb-2">No hay calificaciones</h3>
+          <p class="text-gray-500">Aún no hay calificaciones para esta tutoría</p>
+        </div>
+
+        <div *ngIf="calificaciones.length > 0" class="space-y-4">
+          <mat-card *ngFor="let calificacion of calificaciones" class="hover:shadow-lg transition-shadow">
+            <mat-card-header>
+              <mat-card-title class="text-lg font-semibold">
+                {{ calificacion.estudianteNombre || 'Estudiante Anónimo' }}
+              </mat-card-title>
+              <mat-card-subtitle class="text-sm text-gray-600">{{ calificacion.fechaCreacion | date:'medium' }}</mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-card-content class="mt-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <h4 class="font-semibold text-gray-700 mb-2">Puntuación General</h4>
+                  <div class="flex items-center gap-1">
+                    <mat-icon *ngFor="let star of getEstrellas(calificacion.puntuacion)" class="text-yellow-500">star</mat-icon>
+                    <mat-icon *ngFor="let empty of getEstrellas(5 - calificacion.puntuacion)" class="text-gray-300">star_border</mat-icon>
+                    <span class="ml-2 text-sm text-gray-600">{{ calificacion.puntuacion }}/5</span>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-700 mb-2">Aspectos</h4>
+                  <div class="space-y-1 text-sm">
+                    <div>Claridad: {{ calificacion.claridad }}/5</div>
+                    <div>Dominio del tema: {{ calificacion.dominioTema }}/5</div>
+                    <div>Puntualidad: {{ calificacion.puntualidad }}/5</div>
+                    <div>Utilidad: {{ calificacion.utilidad }}/5</div>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="calificacion.comentario" class="border-t pt-4">
+                <h4 class="font-semibold text-gray-700 mb-2">Comentario</h4>
+                <p class="text-gray-700">{{ calificacion.comentario }}</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

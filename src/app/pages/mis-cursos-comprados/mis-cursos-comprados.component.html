@@ -1,0 +1,129 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Header -->
+    <div class="mb-12 text-center">
+      <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl mb-6 shadow-2xl transform hover:scale-105 transition-transform">
+        <mat-icon class="text-white !text-4xl">library_books</mat-icon>
+      </div>
+      <h1 class="text-5xl md:text-6xl font-black bg-gradient-to-r from-gray-900 via-purple-800 to-pink-800 bg-clip-text text-transparent mb-4">
+        Mis Cursos Comprados
+      </h1>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+        Accede a todo el contenido de los cursos que has adquirido y continúa tu aprendizaje
+      </p>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="flex flex-col items-center justify-center py-24">
+      <div class="relative mb-6">
+        <div class="w-20 h-20 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full animate-pulse opacity-20"></div>
+      </div>
+      <p class="text-gray-700 text-xl font-bold">Cargando tus cursos...</p>
+      <p class="text-gray-500 text-sm mt-2">Esto solo tomará un momento</p>
+    </div>
+
+    <!-- Content -->
+    <div *ngIf="!isLoading">
+      <!-- Sin cursos -->
+      <div *ngIf="cursosComprados.length === 0" class="text-center py-20">
+        <div class="w-24 h-24 bg-gradient-to-r from-purple-200 to-pink-300 rounded-full flex items-center justify-center mx-auto mb-6">
+          <mat-icon class="text-purple-600 text-4xl">shopping_cart</mat-icon>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">Aún no has comprado cursos</h3>
+        <p class="text-gray-600 mb-8 max-w-md mx-auto">Explora nuestro catálogo de cursos y comienza tu viaje de aprendizaje.</p>
+        <button mat-raised-button color="primary" routerLink="/cursos"
+                class="px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-shadow bg-gradient-to-r from-purple-500 to-pink-600">
+          <mat-icon class="mr-2">explore</mat-icon>
+          Explorar Cursos
+        </button>
+      </div>
+
+      <!-- Lista de cursos -->
+      <div *ngIf="cursosComprados.length > 0" class="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+
+        <mat-card *ngFor="let curso of cursosComprados"
+                  class="group bg-white/90 backdrop-blur-sm border border-white/20 rounded-2xl shadow-lg hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300 transform hover:-translate-y-1">
+
+          <!-- Course Image -->
+          <div class="relative overflow-hidden rounded-t-2xl">
+            <div class="aspect-video bg-gray-200 flex items-center justify-center">
+              <img *ngIf="curso.imageUrl" [src]="curso.imageUrl" [alt]="curso.nombre"
+                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              <div *ngIf="!curso.imageUrl" class="w-full h-full bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center">
+                <mat-icon class="text-white !text-4xl">school</mat-icon>
+              </div>
+            </div>
+
+            <!-- Badge de comprado -->
+            <div class="absolute top-4 right-4">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-500 text-white shadow-lg">
+                <mat-icon class="text-xs mr-1">check_circle</mat-icon>
+                Comprado
+              </span>
+            </div>
+          </div>
+
+          <mat-card-content class="p-6">
+            <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors line-clamp-2">
+              {{ curso.nombre }}
+            </h3>
+
+            <p class="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed">
+              {{ curso.descripcion }}
+            </p>
+
+            <div class="flex items-center gap-2 mb-4">
+              <mat-chip [color]="getNivelColor(curso.nivel)" selected class="text-xs">
+                {{ curso.nivel }}
+              </mat-chip>
+              <mat-chip color="accent" selected class="text-xs">
+                {{ curso.categoria }}
+              </mat-chip>
+            </div>
+
+            <div class="flex items-center justify-between text-sm text-gray-600 mb-4">
+              <div class="flex items-center gap-1">
+                <mat-icon class="!text-base">person</mat-icon>
+                <span>{{ curso.creadorNombre || 'Instructor' }}</span>
+              </div>
+              <div class="flex items-center gap-1" *ngIf="curso.calificacionPromedio">
+                <mat-icon class="!text-base text-yellow-500">star</mat-icon>
+                <span>{{ curso.calificacionPromedio.toFixed(1) }}</span>
+              </div>
+            </div>
+
+             <div class="text-xs text-gray-500 mb-4">
+               Comprado el {{ formatFecha(curso.fechaCreacion) }}
+             </div>
+          </mat-card-content>
+
+          <mat-card-actions class="px-6 pb-6 flex flex-col gap-2">
+             <button mat-raised-button color="primary" class="w-full rounded-lg"
+                     (click)="verCurso()">
+               <mat-icon class="mr-2">play_circle</mat-icon>
+               Ver Curso
+             </button>
+
+             <div class="flex gap-2">
+               <button mat-stroked-button color="accent" class="flex-1 rounded-lg text-xs"
+                       (click)="dejarResena()">
+                 <mat-icon class="mr-1">star</mat-icon>
+                 Reseña
+               </button>
+               <button mat-stroked-button color="primary" class="flex-1 rounded-lg text-xs"
+                       (click)="descargarCertificado()">
+                 <mat-icon class="mr-1">download</mat-icon>
+                 Certificado
+               </button>
+             </div>
+          </mat-card-actions>
+
+        </mat-card>
+
+      </div>
+    </div>
+
+  </div>
+</div>

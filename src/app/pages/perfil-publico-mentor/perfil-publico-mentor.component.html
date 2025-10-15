@@ -1,0 +1,203 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="flex flex-col items-center justify-center py-24">
+      <div class="relative mb-6">
+        <div class="w-20 h-20 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full animate-pulse opacity-20"></div>
+      </div>
+      <p class="text-gray-700 text-xl font-bold">Cargando perfil...</p>
+      <p class="text-gray-500 text-sm mt-2">Esto solo tomará un momento</p>
+    </div>
+
+    <!-- Content -->
+    <div *ngIf="!isLoading && perfil" class="space-y-8">
+
+      <!-- Header -->
+      <div class="bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl p-8">
+        <div class="flex flex-col lg:flex-row lg:items-center gap-8">
+
+          <!-- Avatar y Info Básica -->
+          <div class="flex flex-col sm:flex-row items-center gap-6">
+            <div class="w-32 h-32 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-2xl">
+              <mat-icon class="text-white !text-6xl">person</mat-icon>
+            </div>
+            <div class="text-center sm:text-left">
+              <h1 class="text-4xl font-black bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent mb-2">
+                {{ perfil.nombre }}
+              </h1>
+              <div class="flex items-center justify-center sm:justify-start gap-2 mb-4">
+                <div class="flex items-center gap-1">
+                  <mat-icon class="text-yellow-500 !text-lg">star</mat-icon>
+                  <span class="font-bold text-lg">{{ perfil.calificacionPromedio.toFixed(1) }}</span>
+                </div>
+                <span class="text-gray-500">({{ perfil.estadisticas.totalCalificaciones }} calificaciones)</span>
+              </div>
+              <div class="flex flex-wrap justify-center sm:justify-start gap-2">
+                <mat-chip color="primary" selected>Semestre {{ perfil.semestre }}</mat-chip>
+                <mat-chip color="accent" selected>{{ perfil.totalTutoriasDadas }} tutorías dadas</mat-chip>
+              </div>
+            </div>
+          </div>
+
+          <!-- Estadísticas Rápidas -->
+          <div class="flex-1 grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-4 text-center border-2 border-green-200">
+              <mat-icon class="text-green-600 !text-2xl mb-2">school</mat-icon>
+              <div class="text-2xl font-bold text-green-800">{{ perfil.estadisticas.tutoriasCompletadas }}</div>
+              <div class="text-sm text-green-600">Tutorías completadas</div>
+            </div>
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-4 text-center border-2 border-blue-200">
+              <mat-icon class="text-blue-600 !text-2xl mb-2">people</mat-icon>
+              <div class="text-2xl font-bold text-blue-800">{{ perfil.estadisticas.estudiantesUnicos }}</div>
+              <div class="text-sm text-blue-600">Estudiantes ayudados</div>
+            </div>
+            <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-4 text-center border-2 border-purple-200">
+              <mat-icon class="text-purple-600 !text-2xl mb-2">schedule</mat-icon>
+              <div class="text-2xl font-bold text-purple-800">{{ perfil.estadisticas.tutoriasActivas }}</div>
+              <div class="text-sm text-purple-600">Tutorías activas</div>
+            </div>
+            <div class="bg-gradient-to-r from-orange-50 to-red-50 rounded-2xl p-4 text-center border-2 border-orange-200">
+              <mat-icon class="text-orange-600 !text-2xl mb-2">trending_up</mat-icon>
+              <div class="text-2xl font-bold text-orange-800">{{ perfil.estadisticas.promedioGeneral.toFixed(1) }}</div>
+              <div class="text-sm text-orange-600">Promedio general</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Biografía -->
+        <div *ngIf="perfil.biografia" class="mt-8">
+          <h3 class="text-xl font-bold text-gray-900 mb-4">Sobre mí</h3>
+          <p class="text-gray-700 leading-relaxed">{{ perfil.biografia }}</p>
+        </div>
+
+        <!-- Materias que domina -->
+        <div class="mt-6">
+          <h3 class="text-xl font-bold text-gray-900 mb-4">Materias que domino</h3>
+          <div class="flex flex-wrap gap-2">
+            <mat-chip *ngFor="let materia of perfil.materiasQueDomina" color="primary" selected>
+              {{ materia }}
+            </mat-chip>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs de contenido -->
+      <mat-tab-group class="bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl overflow-hidden">
+
+        <!-- Calificaciones y Comentarios -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="mr-2">star</mat-icon>
+            Calificaciones
+            <span class="ml-2 bg-yellow-500 text-white rounded-full px-2 py-1 text-xs font-bold">
+              {{ perfil.calificaciones.length }}
+            </span>
+          </ng-template>
+
+          <div class="p-8">
+            <div *ngIf="perfil.calificaciones.length === 0" class="text-center py-16">
+              <mat-icon class="text-gray-400 !text-6xl mb-4">star_border</mat-icon>
+              <h3 class="text-2xl font-bold text-gray-900 mb-2">Sin calificaciones aún</h3>
+              <p class="text-gray-600">Este mentor aún no tiene calificaciones de estudiantes</p>
+            </div>
+
+            <div *ngIf="perfil.calificaciones.length > 0" class="space-y-6">
+              <h2 class="text-2xl font-bold text-gray-900">Calificaciones de estudiantes</h2>
+
+              <div *ngFor="let calificacion of perfil.calificaciones" class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-6 border-2 border-yellow-200 shadow-md">
+                <div class="flex items-start justify-between gap-4">
+                  <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-3">
+                      <div class="flex items-center">
+                        <span *ngFor="let estrella of getEstrellas(calificacion.puntuacion)" class="text-yellow-500 text-lg">★</span>
+                        <span *ngFor="let estrella of getEstrellas(5 - calificacion.puntuacion)" class="text-gray-300 text-lg">☆</span>
+                      </div>
+                      <span class="font-bold text-lg">{{ calificacion.puntuacion }}/5</span>
+                      <span class="text-gray-500 text-sm">{{ formatFecha(calificacion.fechaCreacion) }}</span>
+                    </div>
+
+                    <div class="flex items-center gap-2 mb-3">
+                      <mat-icon class="text-blue-600 !text-lg">person</mat-icon>
+                      <span class="font-medium text-gray-900">
+                        {{ calificacion.esAnonima ? 'Estudiante anónimo' : calificacion.estudianteNombre }}
+                      </span>
+                    </div>
+
+                    <div *ngIf="calificacion.comentario" class="bg-white/70 rounded-xl p-4">
+                      <p class="text-gray-700 italic">«{{ calificacion.comentario }}»</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- Próximas Tutorías -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="mr-2">event</mat-icon>
+            Próximas Tutorías
+            <span class="ml-2 bg-blue-500 text-white rounded-full px-2 py-1 text-xs font-bold">
+              {{ perfil.proximasTutorias.length }}
+            </span>
+          </ng-template>
+
+          <div class="p-8">
+            <div *ngIf="perfil.proximasTutorias.length === 0" class="text-center py-16">
+              <mat-icon class="text-gray-400 !text-6xl mb-4">event_busy</mat-icon>
+              <h3 class="text-2xl font-bold text-gray-900 mb-2">Sin tutorías programadas</h3>
+              <p class="text-gray-600">Este mentor no tiene tutorías próximas programadas</p>
+            </div>
+
+            <div *ngIf="perfil.proximasTutorias.length > 0" class="space-y-6">
+              <h2 class="text-2xl font-bold text-gray-900">Próximas sesiones de tutoría</h2>
+
+              <div *ngFor="let tutoria of perfil.proximasTutorias" class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border-2 border-blue-200 shadow-md">
+                <div class="flex items-center justify-between">
+                  <div class="flex-1">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">{{ tutoria.titulo }}</h3>
+                    <div class="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                      <div class="flex items-center gap-1">
+                        <mat-icon class="!text-base">schedule</mat-icon>
+                        {{ formatFecha(tutoria.fechaHora) }}
+                      </div>
+                      <div class="flex items-center gap-1">
+                        <mat-icon class="!text-base">{{ tutoria.modalidad === 'Virtual' ? 'videocam' : 'location_on' }}</mat-icon>
+                        {{ tutoria.modalidad }}
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <mat-icon class="text-green-600 !text-lg">people</mat-icon>
+                      <span class="text-sm text-gray-700">
+                        {{ tutoria.cuposDisponibles }} de {{ tutoria.cupoMaximo }} cupos disponibles
+                      </span>
+                    </div>
+                  </div>
+                  <div class="ml-4">
+                    <button mat-raised-button color="primary" [routerLink]="['/tutorias', tutoria.id]">
+                      <mat-icon class="mr-2">visibility</mat-icon>
+                      Ver Detalles
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+
+      </mat-tab-group>
+
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="!isLoading && !perfil" class="text-center py-24">
+      <mat-icon class="text-gray-400 !text-6xl mb-4">error</mat-icon>
+      <h3 class="text-2xl font-bold text-gray-900 mb-2">Error al cargar perfil</h3>
+      <p class="text-gray-600">No se pudo cargar la información del mentor</p>
+    </div>
+
+  </div>
+</div>

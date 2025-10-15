@@ -7,7 +7,7 @@ import { AuthService } from '../services/auth.service';
  * Guardia de ruta funcional para proteger rutas que requieren autenticación.
  * CanActivateFn: Define la firma de un guardia que determina si una ruta puede ser activada.
  */
-export const authGuard: CanActivateFn = (route, state) => {
+export const authGuard: CanActivateFn = () => {
   
   // Usamos inject() para obtener instancias de nuestros servicios.
   // Es el equivalente moderno a la inyección por constructor.

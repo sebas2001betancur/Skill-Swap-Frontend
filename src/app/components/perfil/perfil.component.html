@@ -1,0 +1,177 @@
+<!-- src/app/pages/perfil/perfil.component.html -->
+<div class="perfil-container">
+  <div class="perfil-header">
+    <div class="header-content">
+      <h1>Mi Perfil</h1>
+      <div class="header-actions">
+        <button class="btn btn-edit" (click)="editarPerfilMentor()">
+      <i class="fas fa-edit"></i>
+      Editar
+    </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="perfil-content">
+    <!-- Información Principal -->
+    <div class="perfil-card main-info">
+      <div class="avatar-section">
+        <div class="avatar">
+          <i class="fas fa-user-circle"></i>
+        </div>
+        <div class="user-info">
+          <h2>{{ currentUser?.nombre }}</h2>
+          <p class="email">{{ currentUser?.email }}</p>
+          
+          <!-- Badge de Rol -->
+          <div class="badges">
+            <span class="badge badge-mentor" *ngIf="isMentor">
+              <i class="fas fa-star"></i>
+              Mentor
+            </span>
+            <span class="badge badge-student" *ngIf="!isMentor">
+              <i class="fas fa-graduation-cap"></i>
+              Estudiante
+            </span>
+          </div>
+         </div>
+       </div>
+
+       <!-- Advertencia Perfil Mentor Incompleto -->
+       <div *ngIf="isMentor && !isMentorProfileComplete" class="profile-warning">
+         <div class="warning-content">
+           <div class="warning-icon">
+             <i class="fas fa-exclamation-triangle"></i>
+           </div>
+           <div class="warning-text">
+             <h3>Completa tu perfil de mentor</h3>
+             <p>Para poder crear tutorías, necesitas completar tu biografía y seleccionar las materias que dominas.</p>
+           </div>
+           <button class="btn btn-warning" (click)="editarPerfilMentor()">
+             <i class="fas fa-edit"></i>
+             Completar Perfil
+           </button>
+         </div>
+       </div>
+
+       <!-- Botón Convertirse en Mentor -->
+      <div *ngIf="!isMentor" class="mentor-cta">
+        <div class="cta-content">
+          <div class="cta-icon">
+            <i class="fas fa-rocket"></i>
+          </div>
+          <div class="cta-text">
+            <h3>¿Quieres compartir tu conocimiento?</h3>
+            <p>Conviértete en mentor y ayuda a otros estudiantes</p>
+          </div>
+          <button class="btn btn-primary" (click)="convertirseEnMentor()">
+            <i class="fas fa-bolt"></i>
+            Ser Mentor
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Información Detallada -->
+    <div class="perfil-card details-card">
+      <h3>
+        <i class="fas fa-info-circle"></i>
+        Información Personal
+      </h3>
+      
+      <div class="detail-grid">
+        <div class="detail-item">
+          <span class="label">
+            <i class="fas fa-user"></i>
+            Nombre
+          </span>
+          <span class="value">{{ currentUser?.nombre || 'No disponible' }}</span>
+        </div>
+
+        <div class="detail-item">
+          <span class="label">
+            <i class="fas fa-envelope"></i>
+            Email
+          </span>
+          <span class="value">{{ currentUser?.email || 'No disponible' }}</span>
+        </div>
+
+        <div class="detail-item" *ngIf="currentUser?.semestre">
+          <span class="label">
+            <i class="fas fa-calendar-alt"></i>
+            Semestre
+          </span>
+          <span class="value">{{ currentUser?.semestre }}°</span>
+        </div>
+
+        <div class="detail-item">
+          <span class="label">
+            <i class="fas fa-shield-alt"></i>
+            Rol
+          </span>
+          <span class="value">{{ currentUser?.rol || 'Estudiante' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Información de Mentor -->
+    <div class="perfil-card mentor-card" *ngIf="isMentor">
+      <h3>
+        <i class="fas fa-award"></i>
+        Información de Mentor
+      </h3>
+
+      <!-- Biografía -->
+      <div class="biografia-section" *ngIf="currentUser?.biografia">
+        <h4>Biografía</h4>
+        <p>{{ currentUser?.biografia }}</p>
+      </div>
+
+      <!-- Materias -->
+      <div class="materias-section" *ngIf="hasMaterias">
+        <h4>Materias que Domino</h4>
+        <div class="materias-tags">
+          <span class="materia-tag" *ngFor="let materia of currentUser?.materiasQueDomina">
+            <i class="fas fa-book"></i>
+            {{ materia }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Estadísticas -->
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-icon">
+            <i class="fas fa-star"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ currentUser?.calificacionPromedio?.toFixed(1) || '0.0' }}</span>
+            <span class="stat-label">Calificación</span>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-icon">
+            <i class="fas fa-chalkboard-teacher"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ currentUser?.totalTutoriasDadas || 0 }}</span>
+            <span class="stat-label">Tutorías Dadas</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Acciones de Mentor -->
+      <div class="mentor-actions">
+        <button class="btn btn-primary" (click)="crearTutoria()">
+          <i class="fas fa-calendar-plus"></i>
+          Crear Tutoría
+        </button>
+        <button class="btn btn-secondary" (click)="crearCurso()">
+          <i class="fas fa-plus-circle"></i>
+          Crear Curso
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

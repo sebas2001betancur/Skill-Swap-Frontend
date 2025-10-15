@@ -1,0 +1,149 @@
+<!-- src/app/pages/editar-perfil-mentor/editar-perfil-mentor.component.html -->
+<div class="editar-perfil-container">
+  <div class="header-section">
+    <div class="header-content">
+      <h1>Editar Perfil de Mentor</h1>
+      <p class="subtitle">Actualiza tu información y las materias que dominas</p>
+    </div>
+  </div>
+
+  <div class="form-container">
+    <!-- Alertas -->
+    <div *ngIf="successMessage" class="alert alert-success">
+      <i class="fas fa-check-circle"></i>
+      {{ successMessage }}
+    </div>
+
+    <div *ngIf="error" class="alert alert-error">
+      <i class="fas fa-exclamation-circle"></i>
+      {{ error }}
+    </div>
+
+    <!-- Formulario -->
+    <form [formGroup]="mentorForm" (ngSubmit)="onSubmit()" class="mentor-form">
+      
+      <!-- Biografía -->
+      <div class="form-section">
+        <h2>
+          <i class="fas fa-user-circle"></i>
+          Sobre Ti
+        </h2>
+        
+        <div class="form-group">
+          <label for="biografia">
+            Biografía (Opcional)
+            <span class="hint">Actualiza tu descripción como mentor</span>
+          </label>
+          <textarea
+            id="biografia"
+            formControlName="biografia"
+            rows="5"
+            placeholder="Cuéntanos sobre tu experiencia..."
+            [class.invalid]="f['biografia'].invalid && f['biografia'].touched"
+          ></textarea>
+          <div class="char-counter">
+            {{ f['biografia'].value?.length || 0 }} / 500 caracteres
+          </div>
+          <div *ngIf="f['biografia'].invalid && f['biografia'].touched" class="error-message">
+            {{ getErrorMessage('biografia') }}
+          </div>
+        </div>
+
+        <!-- Semestre -->
+        <div class="form-group">
+          <label for="semestre">
+            Semestre Actual (Opcional)
+          </label>
+          <input
+            type="number"
+            id="semestre"
+            formControlName="semestre"
+            min="1"
+            max="10"
+            placeholder="Ej: 7"
+            [class.invalid]="f['semestre'].invalid && f['semestre'].touched"
+          />
+          <div *ngIf="f['semestre'].invalid && f['semestre'].touched" class="error-message">
+            {{ getErrorMessage('semestre') }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Materias -->
+      <div class="form-section">
+        <h2>
+          <i class="fas fa-book"></i>
+          Materias que Dominas
+          <span class="required">*</span>
+        </h2>
+        <p class="section-description">
+          <i class="fas fa-info-circle"></i>
+          Debes mantener al menos una materia seleccionada
+        </p>
+
+         <div class="materias-grid">
+           <div
+             *ngFor="let materia of materiasDisponibles"
+             class="materia-card"
+             [class.selected]="isMateriaSelected(materia)"
+             (click)="toggleMateria(materia)"
+             (keydown.enter)="toggleMateria(materia)"
+             tabindex="0"
+           >
+            <div class="materia-icon">
+              <i class="fas fa-laptop-code" *ngIf="materia.includes('Programación') || materia.includes('Desarrollo')"></i>
+              <i class="fas fa-database" *ngIf="materia.includes('Datos') || materia.includes('Bases')"></i>
+              <i class="fas fa-network-wired" *ngIf="materia.includes('Redes') || materia.includes('Sistemas')"></i>
+              <i class="fas fa-brain" *ngIf="materia.includes('Inteligencia') || materia.includes('Algoritmos')"></i>
+              <i class="fas fa-calculator" *ngIf="materia.includes('Matemáticas') || materia.includes('Cálculo')"></i>
+              <i class="fas fa-project-diagram" *ngIf="!materia.includes('Programación') && !materia.includes('Datos') && !materia.includes('Redes') && !materia.includes('Inteligencia') && !materia.includes('Matemáticas')"></i>
+            </div>
+            <div class="materia-name">{{ materia }}</div>
+            <div class="materia-check" *ngIf="isMateriaSelected(materia)">
+              <i class="fas fa-check-circle"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="selection-info">
+          <span class="selected-count">
+            {{ materiasSeleccionadas.length }} / 5 materias seleccionadas
+          </span>
+        </div>
+
+        <div *ngIf="f['materiasQueDomina'].invalid && f['materiasQueDomina'].touched" class="error-message">
+          Debes mantener al menos una materia seleccionada
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div class="form-actions">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          [disabled]="isSubmitting"
+          routerLink="/perfil"
+        >
+          <i class="fas fa-times"></i>
+          Cancelar
+        </button>
+        
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="isSubmitting || mentorForm.invalid"
+          [class.loading]="isSubmitting"
+        >
+          <span *ngIf="!isSubmitting">
+            <i class="fas fa-save"></i>
+            Guardar Cambios
+          </span>
+          <span *ngIf="isSubmitting">
+            <i class="fas fa-spinner fa-spin"></i>
+            Guardando...
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

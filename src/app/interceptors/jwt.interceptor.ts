@@ -1,16 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  private authService = inject(AuthService);
+
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const token = this.authService.getToken();
 
-    console.log('Interceptor: Token encontrado:', token ? 'Sí' : 'No'); // <-- LÍNEA DE DEPURACIÓN
+    console.log('Interceptor: Token encontrado:', token ? 'Sí' : 'No');
+    console.log('Interceptor: URL de la petición:', request.url);
 
     if (token) {
       // Clona la petición y añade la cabecera de autorización.
@@ -19,7 +21,9 @@ export class JwtInterceptor implements HttpInterceptor {
           Authorization: `Bearer ${token}`
         }
       });
-      console.log('Interceptor: Cabecera Authorization añadida.'); // <-- LÍNEA DE DEPURACIÓN
+      console.log('Interceptor: Cabecera Authorization añadida.');
+    } else {
+      console.log('Interceptor: No hay token, petición sin autenticación.');
     }
 
     return next.handle(request);

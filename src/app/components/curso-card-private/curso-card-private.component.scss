@@ -1,0 +1,227 @@
+// curso-card-private.component.scss
+
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #2c3e50;
+  --danger-color: #e74c3c;
+  --success-color: #27ae60;
+  --text-color: #2c3e50;
+  --text-light: #7f8c8d;
+  --bg-card: #ffffff;
+  --bg-hover: #f8f9fa;
+  --border-color: #ecf0f1;
+  --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.15);
+  --border-radius: 8px;
+  --transition: all 0.3s ease;
+}
+
+.curso-card-private {
+  background-color: var(--bg-card);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: var(--transition);
+  position: relative;
+
+  &:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-3px);
+  }
+}
+
+.curso-image-container {
+  position: relative;
+  width: 100%;
+  height: 140px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f2f5; // Fondo suave para el placeholder
+}
+
+.curso-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: var(--transition);
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.no-image-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: #7f8c8d;
+  font-size: 3rem; // Icono grande
+}
+
+.nivel-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  z-index: 1;
+}
+
+.curso-info {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.curso-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--secondary-color);
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.curso-price {
+  font-weight: bold;
+  color: var(--primary-color);
+  margin: 0 0 8px 0;
+  font-size: 1.1rem;
+
+  &.gratis {
+    color: var(--success-color);
+  }
+}
+
+.curso-description {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.categoria-badge {
+  display: inline-block;
+  background-color: #ecf0f1;
+  color: var(--text-color);
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 12px;
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+.curso-actions {
+  padding: 0 16px 16px 16px;
+  display: flex;
+  gap: 8px;
+
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+
+    &.btn-icon {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border-radius: 50%;
+
+      i {
+        margin: 0;
+      }
+    }
+
+    &.btn-full {
+      flex-grow: 1;
+    }
+
+    &.btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+
+      &:hover {
+        background-color: #2980b9;
+      }
+    }
+
+    &.btn-secondary {
+      background-color: #95a5a6;
+      color: white;
+
+      &:hover {
+        background-color: #7f8c8d;
+      }
+    }
+
+    &.btn-danger {
+      background-color: var(--danger-color);
+      color: white;
+
+      &:hover {
+        background-color: #c0392b;
+      }
+    }
+  }
+}
+
+// Responsividad
+@media (max-width: 768px) {
+  .curso-card-private {
+    flex-direction: row;
+    height: auto;
+  }
+
+  .curso-image-container {
+    width: 100px;
+    height: 100%;
+  }
+
+  .curso-info {
+    padding: 12px;
+  }
+
+  .curso-title {
+    font-size: 1rem;
+  }
+
+  .curso-actions {
+    flex-direction: column;
+    padding: 0 12px 12px 12px;
+
+    .btn {
+      &.btn-full {
+        flex-grow: 0;
+      }
+    }
+  }
+}
